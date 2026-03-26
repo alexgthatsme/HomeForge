@@ -389,6 +389,17 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
   .hdr-btn{padding:.3rem .55rem;font-size:.58rem;}
   .api-reset{padding:.25rem .45rem;}
 }
+
+/* SAVE PROMPT BANNER */
+.save-prompt{display:none;background:var(--paper2);border:1.5px solid var(--rule2);border-left:3px solid var(--green);padding:.65rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+.save-prompt.show{display:flex;}
+.save-prompt p{font-size:.78rem;color:var(--ink2);flex:1;font-style:italic;}
+.save-prompt-btns{display:flex;gap:.4rem;}
+.sp-btn{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;padding:.32rem .65rem;border:1.5px solid;background:transparent;cursor:pointer;font-family:'Roboto Mono',monospace;transition:all .14s;}
+.sp-save{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.sp-save:hover{background:var(--ink2);}
+.sp-dismiss{color:var(--ink4);border-color:var(--rule2);}
+.sp-dismiss:hover{border-color:var(--ink2);color:var(--ink);}
 </style>
 </head>
 <body>
@@ -533,6 +544,13 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
         <p class="lsub">Analysing space &middot; Applying measurements &middot; Sourcing local materials</p>
       </div>
       <div class="out" id="outDiv">
+        <div class="save-prompt" id="savePrompt">
+          <p>&#128190; Plan generated &#8212; would you like to save it?</p>
+          <div class="save-prompt-btns">
+            <button class="sp-btn sp-save" id="spSaveBtn" type="button">Save Project</button>
+            <button class="sp-btn sp-dismiss" id="spDismissBtn" type="button">Not now</button>
+          </div>
+        </div>
         <div class="out-hdr">
           <div class="out-hdr-top">
             <span class="out-tag">Job Sheet // HomeForge</span>
@@ -756,9 +774,10 @@ function openProject(id){
   document.getElementById('saveBtn').textContent='✓ Saved';document.getElementById('saveBtn').classList.add('saved');
 }
 
-function saveProject(){
+function saveProject(silent){
   if(!currentPlan)return;
-  const btn=document.getElementById('saveBtn');btn.textContent='Saving…';
+  const btn=document.getElementById('saveBtn');
+  if(!silent)btn.textContent='Saving…';
   const projects=loadProjects();
   let thumbDataURL=null;
   if(imgEl){const th=document.createElement('canvas');th.width=320;th.height=Math.round(320*(imgEl.naturalHeight/imgEl.naturalWidth));th.getContext('2d').drawImage(imgEl,0,0,th.width,th.height);thumbDataURL=th.toDataURL('image/jpeg',.7);}
@@ -767,6 +786,7 @@ function saveProject(){
   if(idx>=0)projects[idx]={...proj,id:projects[idx].id};else projects.unshift(proj);
   saveProjects(projects);
   btn.textContent='✓ Saved';btn.classList.add('saved');
+  document.getElementById('savePrompt').classList.remove('show');
 }
 
 // ── LOCATION ───────────────────────────────────────────────────
@@ -1021,7 +1041,13 @@ function renderOut(p,country,isReload){
   document.getElementById('oNotes').innerHTML=(p.notes||[]).map(n=>`<div class="note"><span style="font-size:.9rem;flex-shrink:0">&#9888;&#65039;</span><p>${esc(n)}</p></div>`).join('');
   renderChatSugs();
   document.getElementById('outDiv').classList.add('show');
-  if(!isReload)document.getElementById('outDiv').scrollIntoView({behavior:'smooth',block:'start'});
+  if(!isReload){
+    document.getElementById('outDiv').scrollIntoView({behavior:'smooth',block:'start'});
+    // Show save prompt for new plans
+    document.getElementById('savePrompt').classList.add('show');
+    document.getElementById('saveBtn').textContent='&#128190; Save';
+    document.getElementById('saveBtn').classList.remove('saved');
+  }
 }
 
 // ── COST ESTIMATOR ─────────────────────────────────────────────
@@ -1034,11 +1060,39 @@ function rebuildCostTable(sym){
 function updateCostTotal(sym){const t=costItems.reduce((s,it)=>s+(+it.qty*(+it.unitPrice)),0);document.getElementById('costTotal').textContent=`${sym}${t.toFixed(2)}`;if(currentPlan)currentPlan.costItems=costItems;}
 function addCostRow(){costItems.push({_id:Date.now(),name:'New item',qty:1,unit:'each',unitPrice:0,note:''});rebuildCostTable(currentCountry?.sym||'$');}
 
+
+// ── AUTOSAVE ────────────────────────────────────────────────────
+let _autosaveTimer=null;
+function scheduleAutosave(){
+  if(!currentPlan)return;
+  clearTimeout(_autosaveTimer);
+  _autosaveTimer=setTimeout(()=>{
+    if(currentPlan&&document.getElementById('saveBtn').classList.contains('saved')){
+      saveProject(true); // silent autosave
+    }
+  },1500);
+}
+
 // ── CHAT ───────────────────────────────────────────────────────
 function renderChatSugs(){document.getElementById('chatSugs').innerHTML=["Make it cheaper","Swap to treated pine","More detail on steps","Common mistakes","Add a shelf","How long will it last?"].map(s=>`<div class="sug-chip sug">${s}</div>`).join('');}
+const REGEN_TRIGGERS=/\b(regenerate|redo|start over|new plan|completely redo|rewrite the plan|rebuild the plan|generate again|make a new plan|fresh plan)\b/i;
+
 async function sendChat(){
   const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;
-  input.value='';appendMsg('user',msg);
+  input.value='';
+
+  // Check for regenerate intent
+  if(REGEN_TRIGGERS.test(msg)){
+    appendMsg('user',msg);
+    appendMsg('ai','Regenerating your plan now\u2026');
+    setTimeout(()=>{
+      goTab(2); // go back to describe step
+      setTimeout(()=>generate(),300);
+    },600);
+    return;
+  }
+
+  appendMsg('user',msg);
   document.getElementById('chatSend').disabled=true;document.getElementById('chatTyping').style.display='flex';document.getElementById('chatMessages').scrollTop=99999;
   const country=currentCountry||COUNTRIES[0];const isMetric=country.units==='metric';
   const supStr=Object.entries(country.suppliers).map(([k,v])=>`  ${k}: ${v.join(', ')}`).join('\n');
@@ -1131,7 +1185,9 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('genBtn').addEventListener('click',generate);
 
   // Output
-  document.getElementById('saveBtn').addEventListener('click',saveProject);
+  document.getElementById('saveBtn').addEventListener('click',()=>saveProject(false));
+  document.getElementById('spSaveBtn').addEventListener('click',()=>saveProject(false));
+  document.getElementById('spDismissBtn').addEventListener('click',()=>document.getElementById('savePrompt').classList.remove('show'));
   document.getElementById('printBtn').addEventListener('click',()=>window.print());
   document.getElementById('backToLib').addEventListener('click',()=>showView('library'));
   document.getElementById('anotherProject').addEventListener('click',startNewProject);
@@ -1140,6 +1196,7 @@ document.addEventListener('DOMContentLoaded',function(){
     const inp=e.target;if(!inp.dataset.i)return;
     costItems[+inp.dataset.i][inp.dataset.f]=parseFloat(inp.value)||0;
     rebuildCostTable(currentCountry?.sym||'$');
+    scheduleAutosave();
   });
   document.getElementById('costBody').addEventListener('click',function(e){
     const btn=e.target.closest('.del-row-btn');if(!btn)return;
