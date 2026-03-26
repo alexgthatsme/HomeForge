@@ -400,6 +400,26 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
 .sp-save:hover{background:var(--ink2);}
 .sp-dismiss{color:var(--ink4);border-color:var(--rule2);}
 .sp-dismiss:hover{border-color:var(--ink2);color:var(--ink);}
+
+/* SETUP SCREEN */
+.setup-screen{position:fixed;inset:0;background:rgba(28,23,16,.82);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.setup-screen.hidden{display:none!important;}
+.setup-box{background:var(--paper);border:2px solid var(--ink2);padding:2rem;width:420px;max-width:100%;position:relative;box-shadow:4px 4px 0 var(--ink3);}
+.setup-box::before{content:'CONFIDENTIAL';position:absolute;top:.6rem;right:.8rem;font-family:'Special Elite',cursive;font-size:.6rem;color:var(--red);letter-spacing:.2em;opacity:.35;}
+.sb-logo{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:2px solid var(--ink2);}
+.sb-ico{width:38px;height:38px;border:2px solid var(--ink2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.sb-logo h2{font-family:'Special Elite',cursive;font-size:1.4rem;color:var(--ink);letter-spacing:.02em;}
+.sb-logo p{font-size:.58rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.14em;margin-top:.12rem;}
+.sb-intro{font-size:.78rem;color:var(--ink2);line-height:1.65;margin-bottom:.9rem;}
+.sb-help{font-size:.75rem;color:var(--ink3);line-height:1.6;margin-bottom:.9rem;padding:.65rem .82rem;background:var(--paper2);border-left:3px solid var(--ink3);}
+.sb-help a{color:var(--blue);text-decoration:underline;}
+.sb-err{font-size:.72rem;color:var(--red);margin-bottom:.6rem;display:none;font-style:italic;}
+.sb-field{margin-bottom:.8rem;}
+.sb-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);display:block;margin-bottom:.28rem;}
+.sb-input{width:100%;padding:.6rem .75rem;border:1.5px solid var(--rule2);background:white;font-family:'Roboto Mono',monospace;font-size:.82rem;color:var(--ink);}
+.sb-input:focus{outline:none;border-color:var(--ink2);}
+.sb-btn{width:100%;background:var(--ink);color:var(--paper);border:none;padding:.82rem;font-family:'Special Elite',cursive;font-size:.92rem;cursor:pointer;letter-spacing:.04em;transition:background .18s;}
+.sb-btn:hover{background:var(--ink2);}
 </style>
 </head>
 <body>
@@ -725,7 +745,9 @@ function saveApiKey(){
   if(!k.startsWith('sk-ant-')){err.style.display='block';return;}
   err.style.display='none';
   localStorage.setItem('hf_apikey',k);
-  document.getElementById('setupScreen').classList.add('hidden');
+  const ss=document.getElementById('setupScreen');
+  ss.classList.add('hidden');
+  ss.style.display='none';
   init();
 }
 
@@ -1227,7 +1249,7 @@ function init(){
 function bootApp(){
   if(getApiKey()){
     const ss=document.getElementById('setupScreen');
-    if(ss)ss.classList.add('hidden');
+    if(ss){ss.classList.add('hidden');ss.style.display='none';}
     init();
   }
   // else: setup screen stays visible, init() called from saveApiKey()
