@@ -393,12 +393,22 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
 </head>
 <body>
 
-
+<!-- SETUP SCREEN -->
+<div class="setup-screen" id="setupScreen">
+  <div class="setup-box">
+    <div class="sb-logo"><div class="sb-ico">&#127968;</div><div><h2>HomeForge</h2><p>Project Planner</p></div></div>
+    <p class="sb-intro">To generate plans, HomeForge needs your Anthropic API key. Stored only on this device, sent directly to Anthropic.</p>
+    <div class="sb-help">Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> &rarr; API Keys &rarr; Create Key.<br>Starts with <strong>sk-ant-...</strong> &nbsp;&middot;&nbsp; Cost ~$0.002 per plan.</div>
+    <div class="sb-err" id="setupErr">&#9888; Key should start with sk-ant-</div>
+    <div class="sb-field"><label class="sb-label">Anthropic API Key</label><input type="password" class="sb-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false"></div>
+    <button class="sb-btn" id="saveKeyBtn">Save &amp; Open HomeForge &rarr;</button>
+  </div>
+</div>
 
 <header>
   <div class="hdr-invoice">
     <div class="hdr-left">
-      <div class="hdr-logo-mark" onclick="showView('library')" style="cursor:pointer;">
+      <div class="hdr-logo-mark" id="logoBtn" style="cursor:pointer;">
         <div class="hlm-name">HomeForge</div>
         <div class="hlm-sub">Est. Project Planner</div>
       </div>
@@ -407,33 +417,31 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
         <div class="him-no">Job No.</div>
         <div class="him-val" id="hdrInvNo">HF-001</div>
       </div>
-      <button class="hdr-loc-btn" onclick="openLoc()" type="button">
-        <div class="him-no">Location ✎</div>
-        <div class="him-val" id="hdrLoc"><span id="lpFlag">🌏</span> <span id="lpLoc">Set location</span></div>
+      <button class="hdr-loc-btn" id="locBtn" type="button">
+        <div class="him-no">Location &#9998;</div>
+        <div class="him-val" id="hdrLoc"><span id="lpFlag">&#127758;</span> <span id="lpLoc">Set location</span></div>
       </button>
     </div>
     <div class="hdr-right">
-      <button class="hdr-btn active" id="hbLib" onclick="showView('library')">Projects</button>
-      <button class="hdr-btn" id="hbNew" onclick="startNewProject()">+ New</button>
+      <button class="hdr-btn active" id="hbLib" type="button">Projects</button>
+      <button class="hdr-btn" id="hbNew" type="button">+ New</button>
     </div>
   </div>
 </header>
 
-<!-- ═══════════════════════════════════ LIBRARY VIEW -->
 <div class="view active" id="viewLibrary">
   <main>
-    <button class="new-project-btn" onclick="startNewProject()">⚒ Start New Project</button>
-    <div style="font-size:.8rem;font-weight:600;color:var(--text2);margin-bottom:.75rem;letter-spacing:-.01em;">Saved projects</div>
+    <button class="new-project-btn" id="libNewBtn">&#9874; Start New Project</button>
+    <div style="font-size:.75rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">Saved Projects</div>
     <div id="libGrid" class="lib-grid"></div>
     <div id="libEmpty" class="lib-empty" style="display:none;">
-      <div class="le-ico">📐</div>
+      <div class="le-ico">&#128208;</div>
       <h3>No projects yet</h3>
       <p>Start a new project to see it saved here</p>
     </div>
   </main>
 </div>
 
-<!-- ═══════════════════════════════════ PLANNER VIEW -->
 <div class="view" id="viewPlanner">
   <main>
     <div class="step-nav">
@@ -443,12 +451,11 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
       <div class="step-tab" id="tab3"><span class="tn">04 //</span><span class="tl">Plan</span></div>
     </div>
 
-    <!-- S1: UPLOAD -->
     <div class="panel active" id="panel0">
       <div class="card">
         <div class="card-hd"><div class="ctag">// Step 01</div><div class="cttl">Upload a photo of your space</div></div>
         <div class="card-bd">
-                    <div class="upload-zone" id="uploadZone">
+          <div class="upload-zone" id="uploadZone">
             <div id="uploadPrompt" style="display:flex;flex-direction:column;align-items:center;gap:.5rem;">
               <div class="uico">&#128247;</div>
               <h3>Choose a photo of your space</h3>
@@ -457,246 +464,108 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
                 <label class="upload-label browse">&#128193; Browse Files<input type="file" id="fileInput" accept="image/*"></label>
                 <label class="upload-label camera">&#128247; Take Photo<input type="file" id="cameraInput" accept="image/*" capture="environment"></label>
               </div>
-              <p style="margin-top:.15rem;font-size:.75rem;color:var(--muted);">Or drag &amp; drop here</p>
+              <p style="margin-top:.15rem;font-size:.72rem;color:var(--ink3);">Or drag &amp; drop here</p>
             </div>
             <div class="upload-done-row" id="uploadDone">
               <img class="upload-preview-img" id="uploadPreview" alt="preview">
-              <p style="font-family:'Courier Prime',monospace;font-size:.6rem;color:var(--green);text-transform:uppercase;letter-spacing:.1em;">&#10003; Photo loaded</p>
-              <button class="upload-clear" onclick="clearPhoto()">Remove &amp; choose another</button>
+              <p style="font-size:.65rem;color:var(--green);">&#10003; Photo loaded</p>
+              <button class="upload-clear" id="clearPhotoBtn">Remove &amp; choose another</button>
             </div>
           </div>
-</div>
           <div class="chip-row">
-            <span style="font-size:.75rem;color:var(--text3);">No photo?</span>
-            <div class="chip" onclick="skipPhoto()">Skip &#8212; describe only</div>
+            <span style="font-size:.72rem;color:var(--ink3);">No photo?</span>
+            <div class="chip" id="skipPhotoChip">Skip &#8212; describe only</div>
           </div>
         </div>
       </div>
-      <div class="nav-row"><button class="nbtn nnext" id="toMeasure" onclick="goTab(1)" disabled>Next: Measure →</button></div>
+      <div class="nav-row"><button class="nbtn nnext" id="toMeasure" disabled>Next: Measure &rarr;</button></div>
     </div>
 
-    <!-- S2: MEASURE -->
     <div class="panel" id="panel1">
       <div class="card">
         <div class="card-hd"><div class="ctag">// Step 02</div><div class="cttl">Draw measurement lines on your photo</div></div>
         <div class="card-bd" style="padding:0;">
           <div class="toolbar" id="toolbar">
-            <button class="tbtn on" id="btnDraw" onclick="setTool('draw')">✏ Draw</button>
-            <button class="tbtn" id="btnSel" onclick="setTool('select')">↖ Select</button>
+            <button class="tbtn on" id="btnDraw" type="button">&#9999; Draw</button>
+            <button class="tbtn" id="btnSel" type="button">&#8598; Select</button>
             <div class="tsep"></div>
-            <button class="tbtn del" onclick="clearAll()">✕ Clear</button>
-            <span class="ubadge" id="unitBadge">— units</span>
+            <button class="tbtn del" id="btnClear" type="button">&#10005; Clear</button>
+            <span class="ubadge" id="unitBadge">&#8212; units</span>
             <span class="thint" id="thint">Click two points</span>
           </div>
           <div class="cwrap" id="cwrap"><canvas id="mc"></canvas></div>
           <div style="padding:.78rem 1rem;">
             <div class="ctag">Measurements</div>
-            <div class="meas-list" id="mlist"><div style="font-family:'Courier Prime',monospace;font-size:.58rem;color:var(--muted);padding:.32rem 0;text-transform:uppercase;letter-spacing:.08em;">None yet — draw a line above</div></div>
+            <div class="meas-list" id="mlist"><div style="font-size:.65rem;color:var(--ink4);font-style:italic;padding:.32rem 0;">None yet &#8212; draw a line above</div></div>
           </div>
         </div>
       </div>
       <div class="nav-row">
-        <button class="nbtn nback" onclick="goTab(0)">← Back</button>
-        <button class="nbtn nnext" onclick="goTab(2)">Next: Describe →</button>
+        <button class="nbtn nback" id="backToSpace">&#8592; Back</button>
+        <button class="nbtn nnext" id="toDescribe">Next: Describe &rarr;</button>
       </div>
     </div>
 
-    <!-- S3: DESCRIBE -->
     <div class="panel" id="panel2">
       <div class="card">
         <div class="card-hd"><div class="ctag">// Step 03</div><div class="cttl">Describe your project</div></div>
         <div class="card-bd">
           <textarea id="desc" placeholder="What do you want to build or renovate? Include materials, style, or budget. The AI will use your photo, measurements, and location for a precise local plan."></textarea>
           <div class="chip-row">
-            <span style="font-size:.75rem;color:var(--text3);">Try:</span>
-            <div class="chip" onclick="setEx(this)">Built-in shelving</div>
-            <div class="chip" onclick="setEx(this)">Deck extension</div>
-            <div class="chip" onclick="setEx(this)">Raised garden bed</div>
-            <div class="chip" onclick="setEx(this)">Cabinet repaint</div>
-            <div class="chip" onclick="setEx(this)">Tile backsplash</div>
-            <div class="chip" onclick="setEx(this)">Pergola</div>
+            <span style="font-size:.72rem;color:var(--ink3);">Try:</span>
+            <div class="chip ex-chip">Built-in shelving</div>
+            <div class="chip ex-chip">Deck extension</div>
+            <div class="chip ex-chip">Raised garden bed</div>
+            <div class="chip ex-chip">Cabinet repaint</div>
+            <div class="chip ex-chip">Tile backsplash</div>
+            <div class="chip ex-chip">Pergola</div>
           </div>
-          <button class="gen-btn" id="genBtn" onclick="generate()">⚒ Generate Plan</button>
+          <button class="gen-btn" id="genBtn">&#9874; Generate Plan</button>
         </div>
       </div>
-      <div class="nav-row"><button class="nbtn nback" onclick="goTab(1)">← Back</button></div>
+      <div class="nav-row"><button class="nbtn nback" id="backToMeasure">&#8592; Back</button></div>
     </div>
 
-    <!-- S4: OUTPUT -->
     <div class="panel" id="panel3">
       <div class="loading" id="loading">
         <div class="spinner"></div>
         <p>Drafting your plans<span id="ldots">...</span></p>
-        <p class="lsub">Analysing space · Applying measurements · Sourcing local materials</p>
+        <p class="lsub">Analysing space &middot; Applying measurements &middot; Sourcing local materials</p>
       </div>
-
       <div class="out" id="outDiv">
         <div class="out-hdr">
           <div class="out-hdr-top">
             <span class="out-tag">Job Sheet // HomeForge</span>
             <div class="out-actions">
-              <button class="oact save-btn" id="saveBtn" onclick="saveProject()">&#128190; Save</button>
-              <button class="oact" onclick="window.print()">&#128438; Print</button>
+              <button class="oact save-btn" id="saveBtn" type="button">&#128190; Save</button>
+              <button class="oact" id="printBtn" type="button">&#128438; Print</button>
             </div>
           </div>
           <div class="out-hdr-body">
             <div>
-              <div class="out-ttl" id="oTitle">—</div>
-              <div class="out-loc-tag" id="oLocTag">—</div>
+              <div class="out-ttl" id="oTitle">&#8212;</div>
+              <div class="out-loc-tag" id="oLocTag">&#8212;</div>
             </div>
             <div class="out-hdr-stamps">
-              <div class="hdr-stamp">Time<span id="oTimeStamp">—</span></div>
-              <div class="hdr-stamp">Cost<span id="oCostStamp">—</span></div>
+              <div class="hdr-stamp">Time<span id="oTimeStamp">&#8212;</span></div>
+              <div class="hdr-stamp">Cost<span id="oCostStamp">&#8212;</span></div>
             </div>
           </div>
-        </div>TYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HomeForge – Project Planner</title>
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Roboto+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-
-</head>
-<body>
-
-
-
-
-
-<!-- ═══════════════════════════════════ LIBRARY VIEW -->
-<div class="view active" id="viewLibrary">
-  <main>
-    <button class="new-project-btn" onclick="startNewProject()">⚒ Start New Project</button>
-    <div style="font-size:.8rem;font-weight:600;color:var(--text2);margin-bottom:.75rem;letter-spacing:-.01em;">Saved projects</div>
-    <div id="libGrid" class="lib-grid"></div>
-    <div id="libEmpty" class="lib-empty" style="display:none;">
-      <div class="le-ico">📐</div>
-      <h3>No projects yet</h3>
-      <p>Start a new project to see it saved here</p>
-    </div>
-  </main>
-</div>
-
-<!-- ═══════════════════════════════════ PLANNER VIEW -->
-<div class="view" id="viewPlanner">
-  <main>
-    <div class="step-nav">
-      <div class="step-tab active" id="tab0"><span class="tn">01 //</span><span class="tl">Space</span></div>
-      <div class="step-tab" id="tab1"><span class="tn">02 //</span><span class="tl">Measure</span></div>
-      <div class="step-tab" id="tab2"><span class="tn">03 //</span><span class="tl">Describe</span></div>
-      <div class="step-tab" id="tab3"><span class="tn">04 //</span><span class="tl">Plan</span></div>
-    </div>
-
-    <!-- S1: UPLOAD -->
-    <div class="panel active" id="panel0">
-      <div class="card">
-        <div class="card-hd"><div class="ctag">// Step 01</div><div class="cttl">Upload a photo of your space</div></div>
-        <div class="card-bd">
-                    <div class="upload-zone" id="uploadZone">
-            <div id="uploadPrompt" style="display:flex;flex-direction:column;align-items:center;gap:.5rem;">
-              <div class="uico">&#128247;</div>
-              <h3>Choose a photo of your space</h3>
-              <p>Indoor &middot; Outdoor &middot; Any angle</p>
-              <div class="upload-actions">
-                <label class="upload-label browse">&#128193; Browse Files<input type="file" id="fileInput" accept="image/*"></label>
-                <label class="upload-label camera">&#128247; Take Photo<input type="file" id="cameraInput" accept="image/*" capture="environment"></label>
-              </div>
-              <p style="margin-top:.15rem;font-size:.75rem;color:var(--muted);">Or drag &amp; drop here</p>
-            </div>
-            <div class="upload-done-row" id="uploadDone">
-              <img class="upload-preview-img" id="uploadPreview" alt="preview">
-              <p style="font-family:'Courier Prime',monospace;font-size:.6rem;color:var(--green);text-transform:uppercase;letter-spacing:.1em;">&#10003; Photo loaded</p>
-              <button class="upload-clear" onclick="clearPhoto()">Remove &amp; choose another</button>
-            </div>
-          </div>
-</div>
-          <div class="chip-row">
-            <span style="font-size:.75rem;color:var(--text3);">No photo?</span>
-            <div class="chip" onclick="skipPhoto()">Skip &#8212; describe only</div>
-          </div>
         </div>
-      </div>
-      <div class="nav-row"><button class="nbtn nnext" id="toMeasure" onclick="goTab(1)" disabled>Next: Measure →</button></div>
-    </div>
-
-    <!-- S2: MEASURE -->
-    <div class="panel" id="panel1">
-      <div class="card">
-        <div class="card-hd"><div class="ctag">// Step 02</div><div class="cttl">Draw measurement lines on your photo</div></div>
-        <div class="card-bd" style="padding:0;">
-          <div class="toolbar" id="toolbar">
-            <button class="tbtn on" id="btnDraw" onclick="setTool('draw')">✏ Draw</button>
-            <button class="tbtn" id="btnSel" onclick="setTool('select')">↖ Select</button>
-            <div class="tsep"></div>
-            <button class="tbtn del" onclick="clearAll()">✕ Clear</button>
-            <span class="ubadge" id="unitBadge">— units</span>
-            <span class="thint" id="thint">Click two points</span>
-          </div>
-          <div class="cwrap" id="cwrap"><canvas id="mc"></canvas></div>
-          <div style="padding:.78rem 1rem;">
-            <div class="ctag">Measurements</div>
-            <div class="meas-list" id="mlist"><div style="font-family:'Courier Prime',monospace;font-size:.58rem;color:var(--muted);padding:.32rem 0;text-transform:uppercase;letter-spacing:.08em;">None yet — draw a line above</div></div>
-          </div>
+        <div class="stat-grid">
+          <div class="stat"><div class="sv" id="oTime">&#8212;</div><div class="sl">Est. Time</div></div>
+          <div class="stat"><div class="sv" id="oCost">&#8212;</div><div class="sl">Est. Cost</div></div>
+          <div class="stat"><div class="sv" id="oDiff">&#8212;</div><div class="sl">Difficulty</div></div>
         </div>
-      </div>
-      <div class="nav-row">
-        <button class="nbtn nback" onclick="goTab(0)">← Back</button>
-        <button class="nbtn nnext" onclick="goTab(2)">Next: Describe →</button>
-      </div>
-    </div>
-
-    <!-- S3: DESCRIBE -->
-    <div class="panel" id="panel2">
-      <div class="card">
-        <div class="card-hd"><div class="ctag">// Step 03</div><div class="cttl">Describe your project</div></div>
-        <div class="card-bd">
-          <textarea id="desc" placeholder="What do you want to build or renovate? Include materials, style, or budget. The AI will use your photo, measurements, and location for a precise local plan."></textarea>
-          <div class="chip-row">
-            <span style="font-size:.75rem;color:var(--text3);">Try:</span>
-            <div class="chip" onclick="setEx(this)">Built-in shelving</div>
-            <div class="chip" onclick="setEx(this)">Deck extension</div>
-            <div class="chip" onclick="setEx(this)">Raised garden bed</div>
-            <div class="chip" onclick="setEx(this)">Cabinet repaint</div>
-            <div class="chip" onclick="setEx(this)">Tile backsplash</div>
-            <div class="chip" onclick="setEx(this)">Pergola</div>
-          </div>
-          <button class="gen-btn" id="genBtn" onclick="generate()">⚒ Generate Plan</button>
-        </div>
-      </div>
-      <div class="nav-row"><button class="nbtn nback" onclick="goTab(1)">← Back</button></div>
-    </div>
-
-    <!-- S4: OUTPUT -->
-    <div class="panel" id="panel3">
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>Drafting your plans<span id="ldots">...</span></p>
-        <p class="lsub">Analysing space · Applying measurements · Sourcing local materials</p>
-      </div>
-
-      <div class="out" id="outDiv">
-                <div class="stat-grid">
-          <div class="stat"><div class="sv" id="oTime">—</div><div class="sl">Est. Time</div></div>
-          <div class="stat"><div class="sv" id="oCost">—</div><div class="sl">Est. Cost</div></div>
-          <div class="stat"><div class="sv" id="oDiff">—</div><div class="sl">Difficulty</div></div>
-        </div>
-
         <div class="sec" id="photoSec" style="display:none;">
-          <div class="sec-hd"><span class="sh-tag">SHEET // PHOTO</span><h2>Your Space — Annotated</h2></div>
+          <div class="sec-hd"><span class="sh-tag">SHEET // PHOTO</span><h2>Your Space &#8212; Annotated</h2></div>
           <div class="sec-bd" style="padding:0;"><div class="photo-wrap"><canvas id="oc"></canvas></div></div>
         </div>
-
         <div class="sec">
           <div class="sec-hd"><span class="sh-tag">SHEET // A-01</span><h2>Blueprint Rendering</h2></div>
-          <div class="sec-bd" style="padding:0;">
-            <div class="bp-pre" id="oBp">—</div>
-            <div class="bp-cap" id="oBpCap">Elevation view</div>
-          </div>
+          <div class="sec-bd" style="padding:0;"><div class="bp-pre" id="oBp">&#8212;</div><div class="bp-cap" id="oBpCap">Elevation view</div></div>
         </div>
-
-        <!-- COST ESTIMATOR -->
-        <div class="sec" id="costSec">
+        <div class="sec">
           <div class="sec-hd"><span class="sh-tag">SHEET // B-01</span><h2>Cost Estimator</h2></div>
           <div class="sec-bd">
             <table class="cost-table">
@@ -709,115 +578,79 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
               </tr></thead>
               <tbody id="costBody"></tbody>
             </table>
-            <button class="add-item-btn" onclick="addCostRow()">+ Add Item</button>
-            <div class="cost-footer">
-              <span class="cost-label">Estimated Total</span>
-              <span class="cost-total" id="costTotal">—</span>
-            </div>
+            <button class="add-item-btn" id="addItemBtn" type="button">+ Add Item</button>
+            <div class="cost-footer"><span class="cost-label">Estimated Total</span><span class="cost-total" id="costTotal">&#8212;</span></div>
           </div>
         </div>
-
-        <!-- MATERIALS -->
         <div class="sec">
           <div class="sec-hd"><span class="sh-tag">SHEET // C-01</span><h2>Materials &amp; Tools</h2></div>
-          <div class="sec-bd">
-            <div class="mat-grid" id="oMats">—</div>
-            <div class="sup-label" id="supLabel" style="display:none;">Where to buy — <span id="supRegion"></span></div>
-            <div class="supplier-row" id="supRow"></div>
-          </div>
+          <div class="sec-bd"><div class="mat-grid" id="oMats">&#8212;</div><div class="sup-label" id="supLabel" style="display:none;">Where to buy &#8212; <span id="supRegion"></span></div><div class="supplier-row" id="supRow"></div></div>
         </div>
-
-        <!-- STEPS -->
         <div class="sec">
           <div class="sec-hd"><span class="sh-tag">SHEET // D-01</span><h2>Step-by-Step Build Plan</h2></div>
-          <div class="sec-bd" id="oSteps">—</div>
+          <div class="sec-bd" id="oSteps">&#8212;</div>
         </div>
-
-        <!-- NOTES -->
         <div class="sec">
           <div class="sec-hd"><span class="sh-tag">NOTES // E-01</span><h2>Pro Tips &amp; Safety</h2></div>
-          <div class="sec-bd" id="oNotes">—</div>
+          <div class="sec-bd" id="oNotes">&#8212;</div>
         </div>
-
-        <!-- REFINE CHAT -->
         <div class="chat-panel">
           <div class="chat-hd"><span class="ch-tag">AI ASSISTANT //</span><h2>Refine Your Plan</h2></div>
           <div class="chat-messages" id="chatMessages">
-            <div class="msg ai">
-              <div class="msg-ico">🏠</div>
-              <div class="msg-bubble">Your plan is ready! Ask me anything — I can adjust the design, swap materials, refine the budget, or walk through any step in more detail.</div>
-            </div>
+            <div class="msg ai"><div class="msg-ico">&#127968;</div><div class="msg-bubble">Your plan is ready! Ask me anything &#8212; adjust the design, swap materials, refine the budget, or walk through any step.</div></div>
           </div>
-          <div class="chat-typing" id="chatTyping">
-            <div style="width:26px;height:26px;background:rgba(26,47,74,.08);display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0;">🏠</div>
-            <div class="msg-bubble" style="background:var(--cream);border:1px solid var(--rule);padding:.5rem .75rem;">
-              <div class="ct-dot"></div><div class="ct-dot"></div><div class="ct-dot"></div>
-            </div>
+          <div class="chat-typing" id="chatTyping" style="display:none;align-items:center;gap:.3rem;padding:.5rem 1rem;">
+            <div class="msg-ico">&#127968;</div>
+            <div style="display:flex;gap:.3rem;"><div class="ct-dot"></div><div class="ct-dot"></div><div class="ct-dot"></div></div>
           </div>
           <div class="chat-suggestions" id="chatSugs"></div>
           <div class="chat-input-row">
-            <textarea class="chat-input" id="chatInput" placeholder="Ask anything about your plan…" rows="1" onkeydown="chatKeydown(event)"></textarea>
-            <button class="chat-send" id="chatSend" onclick="sendChat()">Send →</button>
+            <textarea class="chat-input" id="chatInput" placeholder="Ask anything about your plan&#8230;" rows="1"></textarea>
+            <button class="chat-send" id="chatSend" type="button">Send &rarr;</button>
           </div>
         </div>
-
         <div class="nav-row">
-          <button class="nbtn nback" onclick="showView('library')">← All Projects</button>
-          <button class="nbtn nnext" onclick="startNewProject()">+ New Project</button>
+          <button class="nbtn nback" id="backToLib">&#8592; All Projects</button>
+          <button class="nbtn nnext" id="anotherProject">+ New Project</button>
         </div>
       </div>
     </div>
   </main>
 </div>
 
-<!-- LOCATION OVERLAY -->
 <div class="loc-overlay" id="locOverlay">
   <div class="loc-modal">
     <div class="loc-hd"><h2>Where are you working today?</h2><p>// Sets units, standards &amp; local suppliers</p></div>
     <div class="loc-body">
-      <div class="loc-section">
-        <div class="loc-label">Country</div>
-        <div class="country-grid" id="countryGrid"></div>
-      </div>
-      <div class="loc-section" id="regionSection" style="display:none;">
-        <div class="loc-label">State / Region</div>
-        <div class="region-wrap" id="regionWrap"></div>
-      </div>
+      <div class="loc-section"><div class="loc-label">Country</div><div class="country-grid" id="countryGrid"></div></div>
+      <div class="loc-section" id="regionSection" style="display:none;"><div class="loc-label">State / Region</div><div class="region-wrap" id="regionWrap"></div></div>
     </div>
     <div class="loc-footer">
-      <button class="btn bs" onclick="closeLoc()">Cancel</button>
-      <button class="btn bp" onclick="confirmLoc()" id="locConfirm" disabled>Confirm ✓</button>
+      <button class="btn bs-btn" id="cancelLocBtn" type="button">Cancel</button>
+      <button class="btn bp-btn" id="confirmLocBtn" type="button" disabled>Confirm &#10003;</button>
     </div>
   </div>
 </div>
 
-<!-- MEASURE MODAL -->
 <div class="m-overlay" id="mOverlay">
   <div class="mmodal">
     <h3>Label this measurement</h3>
-    <div class="msub2">// Enter the real-world dimension</div>
-    <div class="munit-hint" id="munitHint">e.g. 3600 mm · 2.4 m</div>
+    <div class="msub2">Enter the real-world dimension</div>
+    <div class="munit-hint" id="munitHint">e.g. 3600 mm &middot; 2.4 m</div>
     <div class="mrow">
-      <div>
-        <label style="font-family:'Courier Prime',monospace;font-size:.54rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:.22rem;">Label (optional)</label>
-        <input type="text" id="mLbl" placeholder="e.g. Wall width">
-      </div>
-      <div>
-        <label style="font-family:'Courier Prime',monospace;font-size:.54rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:.22rem;">Dimension *</label>
-        <input type="text" id="mVal" placeholder="3600 mm">
-      </div>
+      <div><label style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);display:block;margin-bottom:.22rem;">Label (optional)</label><input type="text" id="mLbl" placeholder="e.g. Wall width"></div>
+      <div><label style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);display:block;margin-bottom:.22rem;">Dimension *</label><input type="text" id="mVal" placeholder="3600 mm"></div>
     </div>
     <div class="mbtns">
-      <button class="btn bs" onclick="cancelM()">Cancel</button>
-      <button class="btn bp" onclick="confirmM()">Add ✓</button>
+      <button class="btn bs-btn" id="cancelMBtn" type="button">Cancel</button>
+      <button class="btn bp-btn" id="confirmMBtn" type="button">Add &#10003;</button>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-// COUNTRY DATA
-// ═══════════════════════════════════════════════════════════════
+'use strict';
+
 const COUNTRIES=[
   {id:'AU',name:'Australia',flag:'🇦🇺',units:'metric',currency:'AUD',sym:'A$',
    regions:['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'],
@@ -831,63 +664,63 @@ const COUNTRIES=[
    unitEx:'3600 mm · 2.4 m · 90×45 mm',dimPh:'e.g. 3600 mm'},
   {id:'US',name:'United States',flag:'🇺🇸',units:'imperial',currency:'USD',sym:'$',
    regions:['Northeast','Southeast','Midwest','Southwest','West','Pacific Northwest'],
-   suppliers:{general:["Home Depot","Lowe's","Menards"],timber:['84 Lumber','Home Depot Lumber'],tile:['Floor & Decor','Tile Shop'],paint:['Sherwin-Williams','Benjamin Moore'],plumbing:['Ferguson','Home Depot']},
+   suppliers:{general:['Home Depot',"Lowe's",'Menards'],timber:['84 Lumber'],tile:['Floor & Decor'],paint:['Sherwin-Williams','Benjamin Moore'],plumbing:['Ferguson']},
    standards:'IRC/IBC. Dimensional lumber (2×4, 2×6), 16" or 24" OC studs, imperial fasteners.',
    unitEx:'12 ft · 8 ft 6 in · 3.5"',dimPh:'e.g. 12 ft'},
   {id:'GB',name:'United Kingdom',flag:'🇬🇧',units:'metric',currency:'GBP',sym:'£',
    regions:['England','Scotland','Wales','Northern Ireland'],
-   suppliers:{general:['Screwfix','B&Q','Wickes','Travis Perkins'],timber:['Jewson','Buildbase'],tile:['Topps Tiles','CTD Tiles'],paint:['Dulux','Farrow & Ball'],plumbing:['City Plumbing','Screwfix']},
+   suppliers:{general:['Screwfix','B&Q','Wickes','Travis Perkins'],timber:['Jewson','Buildbase'],tile:['Topps Tiles'],paint:['Dulux','Farrow & Ball'],plumbing:['City Plumbing']},
    standards:'UK Building Regs Parts A-R. CLS/PSE metric timber, 400 or 600mm centres, CE-marked materials.',
    unitEx:'3600 mm · 2.4 m · 100×50 mm',dimPh:'e.g. 3600 mm'},
   {id:'CA',name:'Canada',flag:'🇨🇦',units:'imperial',currency:'CAD',sym:'C$',
    regions:['Ontario','British Columbia','Quebec','Alberta','Manitoba','Nova Scotia'],
-   suppliers:{general:['Home Depot','RONA','Home Hardware'],timber:['Home Hardware Lumber'],tile:['Centura Tile'],paint:['Benjamin Moore','Sherwin-Williams'],plumbing:['Wolseley','EMCO']},
+   suppliers:{general:['Home Depot','RONA','Home Hardware'],timber:['Home Hardware Lumber'],tile:['Centura Tile'],paint:['Benjamin Moore'],plumbing:['Wolseley']},
    standards:'NBC Canada. 2×4/2×6 lumber, 16" OC, CSA-certified materials.',
    unitEx:'12 ft · 8 ft 6 in · 3.5"',dimPh:'e.g. 12 ft'},
   {id:'EU',name:'Europe',flag:'🇪🇺',units:'metric',currency:'EUR',sym:'€',
    regions:['Germany','France','Netherlands','Spain','Italy','Sweden','Belgium','Other'],
-   suppliers:{general:['OBI','Hornbach','Leroy Merlin','Castorama'],timber:['Hornbach','Bauhaus'],tile:['Hornbach Tiles'],paint:['Caparol','Sto'],plumbing:['Hornbach Plumbing']},
+   suppliers:{general:['OBI','Hornbach','Leroy Merlin'],timber:['Hornbach','Bauhaus'],tile:['Hornbach Tiles'],paint:['Caparol','Sto'],plumbing:['Hornbach Plumbing']},
    standards:'Eurocode (EN) + national annexes. Metric timber, CE-marked, DIN/EN fasteners.',
    unitEx:'3600 mm · 2.4 m · 100×50 mm',dimPh:'e.g. 3600 mm'},
 ];
 
-// ═══════════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════════
+// ── STATE ──────────────────────────────────────────────────────
 let loc={country:'AU',region:'VIC'};
-let imgEl=null,imgDataURL=null,imgFile=null;
+let imgEl=null,imgDataURL=null;
 let measurements=[];
 let tool='draw',drawState='idle';
-let ptA=null,ptMouse=null,pending=null,selectedId=null;
-let cScale=1;
-let currentPlan=null; // full plan object for saving/chat
-let currentCountry=null;
-let chatHistory=[]; // for multi-turn chat
+let ptA=null,ptMouse=null,pending=null,selectedId=null,cScale=1;
+let currentPlan=null,currentCountry=null,chatHistory=[];
 const COLORS=['#e8a85a','#7ec8a0','#7ab8e8','#e87a7a','#c8a0e8','#e8c87a'];
 
-// ═══════════════════════════════════════════════════════════════
-// STORAGE
-// ═══════════════════════════════════════════════════════════════
-function storageKey(k){return'hf_'+k;}
-function loadProjects(){try{return JSON.parse(localStorage.getItem('hf_projects')||'[]');}catch{return[];}}
-function saveProjects(arr){localStorage.setItem('hf_projects',JSON.stringify(arr));}
+// ── STORAGE ────────────────────────────────────────────────────
+function loadProjects(){try{return JSON.parse(localStorage.getItem('hf_projects')||'[]');}catch{return [];}}
+function saveProjects(a){localStorage.setItem('hf_projects',JSON.stringify(a));}
 function loadLoc(){try{const s=localStorage.getItem('hf_loc');if(s)loc=JSON.parse(s);}catch{}}
 function saveLoc(){localStorage.setItem('hf_loc',JSON.stringify(loc));}
+function getApiKey(){return localStorage.getItem('hf_apikey')||'';}
 
-// ═══════════════════════════════════════════════════════════════
-// VIEWS
-// ═══════════════════════════════════════════════════════════════
+// ── API KEY SETUP ──────────────────────────────────────────────
+function saveApiKey(){
+  const k=document.getElementById('apiKeyInput').value.trim();
+  const err=document.getElementById('setupErr');
+  if(!k.startsWith('sk-ant-')){err.style.display='block';return;}
+  err.style.display='none';
+  localStorage.setItem('hf_apikey',k);
+  document.getElementById('setupScreen').classList.add('hidden');
+  init();
+}
+
+// ── VIEWS ──────────────────────────────────────────────────────
 function showView(v){
   document.getElementById('viewLibrary').classList.toggle('active',v==='library');
   document.getElementById('viewPlanner').classList.toggle('active',v==='planner');
   document.getElementById('hbLib').classList.toggle('active',v==='library');
   document.getElementById('hbNew').classList.toggle('active',v==='planner');
-  if(v==='library') renderLibrary();
+  if(v==='library')renderLibrary();
 }
 
-// ═══════════════════════════════════════════════════════════════
-// LIBRARY
-// ═══════════════════════════════════════════════════════════════
+// ── LIBRARY ────────────────────────────────────────────────────
 function renderLibrary(){
   const projects=loadProjects();
   const grid=document.getElementById('libGrid');
@@ -895,151 +728,100 @@ function renderLibrary(){
   if(!projects.length){grid.innerHTML='';empty.style.display='';return;}
   empty.style.display='none';
   grid.innerHTML=projects.map(p=>`
-    <div class="proj-card" onclick="openProject('${p.id}')">
-      <div class="pc-thumb">
-        ${p.thumbDataURL?`<img src="${p.thumbDataURL}">`:`<span class="pc-no-img">No photo</span>`}
-        <span class="pc-loc-badge">${esc(p.region)}</span>
-      </div>
+    <div class="proj-card" data-id="${p.id}">
+      <div class="pc-thumb">${p.thumbDataURL?`<img src="${p.thumbDataURL}">`:'<span class="pc-no-img">No photo</span>'}<span class="pc-loc-badge">${esc(p.region)}</span></div>
       <div class="pc-body">
         <div class="pc-title">${esc(p.title)}</div>
         <div class="pc-sub">${esc(p.subtitle||'')}</div>
-        <div class="pc-meta">
-          <span class="pc-stat">${esc(p.cost||'—')}</span>
-          <span class="pc-stat">${esc(p.time||'—')}</span>
-          <span class="pc-date">${new Date(p.savedAt).toLocaleDateString()}</span>
-        </div>
-        <div class="pc-actions" onclick="event.stopPropagation()">
-          <button class="pca" onclick="openProject('${p.id}')">Open</button>
-          <button class="pca" onclick="printProject('${p.id}')">Print</button>
-          <button class="pca danger" onclick="deleteProject('${p.id}')">Delete</button>
+        <div class="pc-meta"><span class="pc-stat">${esc(p.cost||'—')}</span><span class="pc-stat">${esc(p.time||'—')}</span><span class="pc-date">${new Date(p.savedAt).toLocaleDateString()}</span></div>
+        <div class="pc-actions">
+          <button class="pca open-proj" data-id="${p.id}">Open</button>
+          <button class="pca del-proj danger" data-id="${p.id}">Delete</button>
         </div>
       </div>
     </div>`).join('');
 }
 
 function openProject(id){
-  const projects=loadProjects();
-  const p=projects.find(x=>x.id===id);
-  if(!p)return;
-  // Restore state
-  currentPlan=p.plan;
-  currentCountry=COUNTRIES.find(c=>c.id===p.countryId)||COUNTRIES[0];
-  loc={country:p.countryId,region:p.region};
-  updateLocPill();
-  // Restore image if saved
-  if(p.imgDataURL){
-    imgDataURL=p.imgDataURL;
-    imgEl=new Image();
-    imgEl.src=imgDataURL;
-  } else {imgEl=null;imgDataURL=null;}
+  const p=loadProjects().find(x=>x.id===id);if(!p)return;
+  currentPlan=p.plan;currentCountry=COUNTRIES.find(c=>c.id===p.countryId)||COUNTRIES[0];
+  loc={country:p.countryId,region:p.region};updateLocPill();
+  if(p.imgDataURL){imgDataURL=p.imgDataURL;imgEl=new Image();imgEl.src=imgDataURL;}
+  else{imgEl=null;imgDataURL=null;}
   measurements=p.measurements||[];
   document.getElementById('desc').value=p.description||'';
-  showView('planner');
-  goTab(3);
+  showView('planner');goTab(3);
   document.getElementById('loading').classList.remove('show');
   renderOut(p.plan,currentCountry,true);
-  document.getElementById('saveBtn').textContent='✓ Saved';
-  document.getElementById('saveBtn').classList.add('saved');
+  document.getElementById('saveBtn').textContent='✓ Saved';document.getElementById('saveBtn').classList.add('saved');
 }
-
-function deleteProject(id){
-  if(!confirm('Delete this project?'))return;
-  saveProjects(loadProjects().filter(p=>p.id!==id));
-  renderLibrary();
-}
-
-function printProject(id){openProject(id).then(()=>setTimeout(printPlan,600));}
 
 function saveProject(){
-  if(!currentPlan) return;
-  const btn=document.getElementById('saveBtn');
-  btn.textContent='Saving…';
+  if(!currentPlan)return;
+  const btn=document.getElementById('saveBtn');btn.textContent='Saving…';
   const projects=loadProjects();
-  // Make thumbnail from annotated canvas or raw image
   let thumbDataURL=null;
-  if(imgEl){
-    const th=document.createElement('canvas');
-    th.width=320;th.height=Math.round(320*(imgEl.naturalHeight/imgEl.naturalWidth));
-    th.getContext('2d').drawImage(imgEl,0,0,th.width,th.height);
-    thumbDataURL=th.toDataURL('image/jpeg',.7);
-  }
-  const proj={
-    id:'p_'+Date.now(),
-    title:currentPlan.title,subtitle:currentPlan.subtitle,
-    cost:currentPlan.cost,time:currentPlan.time,
-    countryId:loc.country,region:loc.region,
-    description:document.getElementById('desc').value,
-    plan:currentPlan,measurements,
-    imgDataURL:imgDataURL||null,
-    thumbDataURL,savedAt:Date.now(),
-  };
-  // Replace if same title+region exists
+  if(imgEl){const th=document.createElement('canvas');th.width=320;th.height=Math.round(320*(imgEl.naturalHeight/imgEl.naturalWidth));th.getContext('2d').drawImage(imgEl,0,0,th.width,th.height);thumbDataURL=th.toDataURL('image/jpeg',.7);}
+  const proj={id:'p_'+Date.now(),title:currentPlan.title,subtitle:currentPlan.subtitle,cost:currentPlan.cost,time:currentPlan.time,countryId:loc.country,region:loc.region,description:document.getElementById('desc').value,plan:currentPlan,measurements,imgDataURL:imgDataURL||null,thumbDataURL,savedAt:Date.now()};
   const idx=projects.findIndex(p=>p.title===proj.title&&p.region===proj.region);
-  if(idx>=0) projects[idx]={...proj,id:projects[idx].id};
-  else projects.unshift(proj);
+  if(idx>=0)projects[idx]={...proj,id:projects[idx].id};else projects.unshift(proj);
   saveProjects(projects);
   btn.textContent='✓ Saved';btn.classList.add('saved');
 }
 
-// ═══════════════════════════════════════════════════════════════
-// LOCATION
-// ═══════════════════════════════════════════════════════════════
+// ── LOCATION ───────────────────────────────────────────────────
 let _selC=null,_selR=null;
+
 function buildCountryGrid(){
-  document.getElementById('countryGrid').innerHTML=COUNTRIES.map(c=>`
-    <div class="cc" id="cc_${c.id}" onclick="selC('${c.id}')">
-      <span class="cc-flag">${c.flag}</span>
-      <span class="cc-name">${c.name}</span>
-      <span class="cc-units">${c.units}</span>
-    </div>`).join('');
-}
-function selC(id){
-  _selC=id;_selR=null;
-  document.querySelectorAll('.cc').forEach(e=>e.classList.remove('sel'));
-  document.getElementById('cc_'+id).classList.add('sel');
-  const c=COUNTRIES.find(x=>x.id===id);
-  document.getElementById('regionWrap').innerHTML=c.regions.map(r=>`<div class="rc" onclick="selR(this,'${r}')">${r}</div>`).join('');
-  document.getElementById('regionSection').style.display='';
-  document.getElementById('locConfirm').disabled=true;
-}
-function selR(el,r){
-  _selR=r;
-  document.querySelectorAll('.rc').forEach(e=>e.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('locConfirm').disabled=false;
-}
-function openLoc(){
-  buildCountryGrid();
-  if(loc.country){
-    selC(loc.country);
-    setTimeout(()=>{
-      document.querySelectorAll('.rc').forEach(el=>{if(el.textContent===loc.region)selR(el,loc.region);});
-    },50);
-  }
-  document.getElementById('locOverlay').classList.add('open');
-}
-function closeLoc(){document.getElementById('locOverlay').classList.remove('open');}
-function confirmLoc(){
-  if(!_selC||!_selR)return;
-  loc={country:_selC,region:_selR};
-  saveLoc();updateLocPill();closeLoc();
-}
-function updateLocPill(){
-  const c=COUNTRIES.find(x=>x.id===loc.country);
-  if(!c)return;
-  document.getElementById('lpFlag').textContent=c.flag;
-  document.getElementById('lpLoc').textContent=`${loc.region}, ${c.name}`;
-  document.getElementById('unitBadge').textContent=c.units==='metric'?'mm / m':'ft / in';
-  document.getElementById('munitHint').textContent=c.unitEx;
-  document.getElementById('mVal').placeholder=c.dimPh;
+  document.getElementById('countryGrid').innerHTML=COUNTRIES.map(c=>`<div class="cc" data-id="${c.id}"><span class="cc-flag">${c.flag}</span><span class="cc-name">${c.name}</span><span class="cc-units">${c.units}</span></div>`).join('');
 }
 
-// ═══════════════════════════════════════════════════════════════
-// CANVAS
-// ═══════════════════════════════════════════════════════════════
+function openLoc(){
+  buildCountryGrid();
+  _selC=null;_selR=null;
+  document.getElementById('regionSection').style.display='none';
+  document.getElementById('confirmLocBtn').disabled=true;
+  if(loc.country){
+    const el=document.querySelector(`.cc[data-id="${loc.country}"]`);
+    if(el){el.classList.add('sel');_selC=loc.country;showRegions(loc.country);}
+    setTimeout(()=>{
+      document.querySelectorAll('.rc').forEach(el=>{if(el.textContent.trim()===loc.region){el.classList.add('sel');_selR=loc.region;document.getElementById('confirmLocBtn').disabled=false;}});
+    },60);
+  }
+  document.getElementById('locOverlay').style.display='flex';
+}
+
+function closeLoc(){document.getElementById('locOverlay').style.display='none';}
+
+function showRegions(countryId){
+  const c=COUNTRIES.find(x=>x.id===countryId);if(!c)return;
+  document.getElementById('regionWrap').innerHTML=c.regions.map(r=>`<div class="rc" data-region="${r}">${r}</div>`).join('');
+  document.getElementById('regionSection').style.display='';
+}
+
+function confirmLoc(){
+  if(!_selC||!_selR)return;
+  loc={country:_selC,region:_selR};saveLoc();updateLocPill();closeLoc();
+}
+
+function updateLocPill(){
+  const c=COUNTRIES.find(x=>x.id===loc.country);if(!c)return;
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  const setH=(id,val)=>{const el=document.getElementById(id);if(el)el.innerHTML=val;};
+  const setPH=(id,val)=>{const el=document.getElementById(id);if(el)el.placeholder=val;};
+  set('lpFlag',c.flag);
+  set('lpLoc',`${loc.region}, ${c.name}`);
+  setH('hdrLoc',`<span>${c.flag}</span> <span>${loc.region}, ${c.name}</span>`);
+  set('unitBadge',c.units==='metric'?'mm / m':'ft / in');
+  set('munitHint',c.unitEx);
+  setPH('mVal',c.dimPh);
+}
+
+// ── CANVAS ─────────────────────────────────────────────────────
 const canvas=document.getElementById('mc');
 const ctx=canvas.getContext('2d');
 const cwrap=document.getElementById('cwrap');
+
 function initCanvas(img){
   const mw=Math.min(cwrap.clientWidth||800,900);
   cScale=mw/img.naturalWidth;
@@ -1047,44 +829,46 @@ function initCanvas(img){
   canvas.height=Math.round(img.naturalHeight*cScale);
   redraw();
 }
+
 function redraw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if(imgEl)ctx.drawImage(imgEl,0,0,canvas.width,canvas.height);
   measurements.forEach(m=>drawLine(ctx,m,m.id===selectedId));
   if(drawState==='b'&&ptA&&ptMouse){
-    ctx.save();ctx.strokeStyle='rgba(232,168,90,.75)';ctx.lineWidth=2;ctx.setLineDash([5,4]);
+    ctx.save();ctx.strokeStyle='rgba(232,168,90,.8)';ctx.lineWidth=2;ctx.setLineDash([5,4]);
     ctx.beginPath();ctx.moveTo(ptA.x,ptA.y);ctx.lineTo(ptMouse.x,ptMouse.y);ctx.stroke();
-    ctx.setLineDash([]);ctx.fillStyle='rgba(232,168,90,.9)';
-    ctx.beginPath();ctx.arc(ptA.x,ptA.y,5,0,Math.PI*2);ctx.fill();ctx.restore();
+    ctx.setLineDash([]);ctx.fillStyle='rgba(232,168,90,.9)';ctx.beginPath();ctx.arc(ptA.x,ptA.y,5,0,Math.PI*2);ctx.fill();
+    ctx.restore();
   }
 }
+
 function drawLine(c,m,sel){
-  const col=m.color;c.save();
-  c.strokeStyle=sel?'#fff':col;c.lineWidth=sel?2.5:2;
+  const col=m.color;c.save();c.strokeStyle=sel?'#fff':col;c.lineWidth=sel?2.5:2;
   c.beginPath();c.moveTo(m.x1,m.y1);c.lineTo(m.x2,m.y2);c.stroke();
   const a=Math.atan2(m.y2-m.y1,m.x2-m.x1),p=a+Math.PI/2;
   [[m.x1,m.y1],[m.x2,m.y2]].forEach(([px,py])=>{
     c.beginPath();c.moveTo(px+Math.cos(p)*6,py+Math.sin(p)*6);c.lineTo(px-Math.cos(p)*6,py-Math.sin(p)*6);c.stroke();
     c.fillStyle=col;c.beginPath();c.arc(px,py,4,0,Math.PI*2);c.fill();
   });
-  const mx=(m.x1+m.x2)/2,my=(m.y1+m.y2)/2;
-  const lbl=m.value+(m.label?` (${m.label})`:'');
-  c.font='bold 11px "Courier Prime",monospace';
-  const tw=c.measureText(lbl).width;
-  c.fillStyle='rgba(26,47,74,.86)';c.fillRect(mx-tw/2-5,my-9,tw+10,17);
+  const mx=(m.x1+m.x2)/2,my=(m.y1+m.y2)/2,lbl=m.value+(m.label?` (${m.label})`:'');
+  c.font='bold 11px "Roboto Mono",monospace';const tw=c.measureText(lbl).width;
+  c.fillStyle='rgba(28,23,16,.88)';c.fillRect(mx-tw/2-5,my-9,tw+10,17);
   c.fillStyle=col;c.textAlign='center';c.textBaseline='middle';c.fillText(lbl,mx,my);c.restore();
 }
+
 function getPos(e){
   const r=canvas.getBoundingClientRect();
   const s=(e.touches&&e.touches.length)?e.touches[0]:(e.changedTouches&&e.changedTouches.length)?e.changedTouches[0]:e;
   return{x:(s.clientX-r.left)*(canvas.width/r.width),y:(s.clientY-r.top)*(canvas.height/r.height)};
 }
+
 canvas.addEventListener('mousedown',onDn);
 canvas.addEventListener('touchstart',e=>{e.preventDefault();onDn(e);},{passive:false});
 canvas.addEventListener('mousemove',onMv);
 canvas.addEventListener('touchmove',e=>{e.preventDefault();onMv(e);},{passive:false});
 canvas.addEventListener('mouseup',onUp);
 canvas.addEventListener('touchend',e=>{e.preventDefault();onUp(e);},{passive:false});
+
 function onDn(e){const p=getPos(e);if(tool==='draw'){if(drawState==='idle'){drawState='b';ptA=p;ptMouse=p;}}else{selectedId=hitTest(p.x,p.y);redraw();}}
 function onMv(e){if(tool==='draw'&&drawState==='b'){ptMouse=getPos(e);redraw();}}
 function onUp(e){
@@ -1094,60 +878,44 @@ function onUp(e){
     drawState='idle';ptA=null;ptMouse=null;redraw();
   }
 }
-function hitTest(x,y){
-  for(let i=measurements.length-1;i>=0;i--){const m=measurements[i];if(ptSegDist(x,y,m.x1,m.y1,m.x2,m.y2)<10)return m.id;}
-  return null;
-}
+function hitTest(x,y){for(let i=measurements.length-1;i>=0;i--){const m=measurements[i];if(ptSegDist(x,y,m.x1,m.y1,m.x2,m.y2)<10)return m.id;}return null;}
 function ptSegDist(px,py,ax,ay,bx,by){const dx=bx-ax,dy=by-ay;if(!dx&&!dy)return Math.hypot(px-ax,py-ay);const t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy)));return Math.hypot(px-(ax+t*dx),py-(ay+t*dy));}
 function setTool(t){tool=t;document.getElementById('btnDraw').classList.toggle('on',t==='draw');document.getElementById('btnSel').classList.toggle('on',t==='select');document.getElementById('thint').textContent=t==='draw'?'Click two points':'Click line to select';cwrap.classList.toggle('idle',t!=='draw');}
 
-// ═══════════════════════════════════════════════════════════════
-// MEASURE MODAL
-// ═══════════════════════════════════════════════════════════════
-function openM(){document.getElementById('mLbl').value='';document.getElementById('mVal').value='';document.getElementById('mOverlay').classList.add('open');setTimeout(()=>document.getElementById('mVal').focus(),80);}
-document.getElementById('mVal').addEventListener('keydown',e=>{if(e.key==='Enter')confirmM();if(e.key==='Escape')cancelM();});
+// ── MEASURE MODAL ──────────────────────────────────────────────
+function openM(){document.getElementById('mLbl').value='';document.getElementById('mVal').value='';document.getElementById('mOverlay').style.display='flex';setTimeout(()=>document.getElementById('mVal').focus(),80);}
 function confirmM(){
   const v=document.getElementById('mVal').value.trim();if(!v){document.getElementById('mVal').style.borderColor='var(--red)';return;}
   const l=document.getElementById('mLbl').value.trim();
   measurements.push({id:Date.now(),...pending,label:l,value:v,color:COLORS[measurements.length%COLORS.length]});
-  document.getElementById('mOverlay').classList.remove('open');pending=null;redraw();renderMList();
+  document.getElementById('mOverlay').style.display='none';pending=null;redraw();renderMList();
 }
-function cancelM(){document.getElementById('mOverlay').classList.remove('open');pending=null;redraw();}
+function cancelM(){document.getElementById('mOverlay').style.display='none';pending=null;redraw();}
 function renderMList(){
   const el=document.getElementById('mlist');
-  if(!measurements.length){el.innerHTML='<div style="font-family:\'Courier Prime\',monospace;font-size:.58rem;color:var(--muted);padding:.32rem 0;text-transform:uppercase;letter-spacing:.08em;">None yet</div>';return;}
-  el.innerHTML=measurements.map(m=>`<div class="mi"><span class="msw" style="background:${m.color}"></span><span class="mname">${esc(m.label||'Measurement')}</span><span class="mval">${esc(m.value)}</span><button class="mdel" onclick="delM(${m.id})">✕</button></div>`).join('');
+  if(!measurements.length){el.innerHTML='<div style="font-size:.65rem;color:var(--ink4);font-style:italic;padding:.32rem 0;">None yet</div>';return;}
+  el.innerHTML=measurements.map(m=>`<div class="mi"><span class="msw" style="background:${m.color}"></span><span class="mname">${esc(m.label||'Measurement')}</span><span class="mval">${esc(m.value)}</span><button class="mdel del-meas" data-id="${m.id}" type="button">&#10005;</button></div>`).join('');
 }
-function delM(id){measurements=measurements.filter(m=>m.id!==id);redraw();renderMList();}
-function clearAll(){if(measurements.length&&!confirm('Clear all?'))return;measurements=[];redraw();renderMList();}
 
-// ═══════════════════════════════════════════════════════════════
-// FILE UPLOAD
-// ═══════════════════════════════════════════════════════════════
+// ── FILE UPLOAD ────────────────────────────────────────────────
 function handleFileLoad(file){
   if(!file||!file.type.startsWith('image/'))return;
   const r=new FileReader();
   r.onload=ev=>{
-    imgDataURL=ev.target.result;
-    imgEl=new Image();
+    imgDataURL=ev.target.result;imgEl=new Image();
     imgEl.onload=()=>{
-      initCanvas(imgEl);
-      document.getElementById('toMeasure').disabled=false;
-      document.getElementById('uploadPreview').src=imgDataURL;
-      document.getElementById('uploadPreview').style.display='block';
-      document.getElementById('uploadPrompt').style.display='none';
-      document.getElementById('uploadDone').style.display='flex';
-    };
-    imgEl.src=imgDataURL;
-  };
-  r.readAsDataURL(file);
+      initCanvas(imgEl);document.getElementById('toMeasure').disabled=false;
+      document.getElementById('uploadPreview').src=imgDataURL;document.getElementById('uploadPreview').style.display='block';
+      document.getElementById('uploadPrompt').style.display='none';document.getElementById('uploadDone').style.display='flex';
+    };imgEl.src=imgDataURL;
+  };r.readAsDataURL(file);
 }
-document.getElementById('fileInput').addEventListener('change',e=>handleFileLoad(e.target.files[0]));
-document.getElementById('cameraInput').addEventListener('change',e=>handleFileLoad(e.target.files[0]));
+
 const _uz=document.getElementById('uploadZone');
 _uz.addEventListener('dragover',e=>{e.preventDefault();_uz.classList.add('drag-over');});
 _uz.addEventListener('dragleave',()=>_uz.classList.remove('drag-over'));
 _uz.addEventListener('drop',e=>{e.preventDefault();_uz.classList.remove('drag-over');handleFileLoad(e.dataTransfer.files[0]);});
+
 function clearPhoto(){
   imgEl=null;imgDataURL=null;
   document.getElementById('uploadPreview').src='';document.getElementById('uploadPreview').style.display='none';
@@ -1156,18 +924,11 @@ function clearPhoto(){
   try{document.getElementById('fileInput').value='';document.getElementById('cameraInput').value='';}catch(e){}
   canvas.width=0;canvas.height=0;measurements=[];renderMList();
 }
-function skipPhoto(){imgEl=null;imgDataURL=null;document.getElementById('toMeasure').disabled=false;canvas.width=0;canvas.height=0;document.getElementById('toolbar').innerHTML='<span style="font-size:.72rem;color:var(--text3);padding:.25rem;">No photo — describe your space in step 3</span>';goTab(1);}
 
-// ═══════════════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════════
-// EXAMPLES
-// ═══════════════════════════════════════════════════════════════
+// ── EXAMPLES ──────────────────────────────────────────────────
 const EX={'Built-in shelving':'Floor-to-ceiling built-in shelves in the alcove. Six adjustable shelves, closed cabinet with doors at bottom, crown moulding to blend into wall.','Deck extension':'Extend the existing deck outward using the measured dimensions. Same railing style, up to code.','Raised garden bed':'Raised garden bed in this area using dimensions shown. 300mm tall, gravel base for drainage.','Cabinet repaint':'Repaint these kitchen cabinets. Strip finish, prime and paint off-white. Include prep and application technique.','Tile backsplash':'Subway tile backsplash to the area shown. Horizontal brick pattern, white tile, grey grout.','Pergola':'Timber pergola over the outdoor area. Open battened roof for partial shade, posts to match the house.'};
-function setEx(el){document.getElementById('desc').value=EX[el.textContent.trim()]||el.textContent;}
 
-// ═══════════════════════════════════════════════════════════════
-// TAB NAV
-// ═══════════════════════════════════════════════════════════════
+// ── TAB NAV ────────────────────────────────────────────────────
 function goTab(n){
   [0,1,2,3].forEach(i=>{
     document.getElementById(`panel${i}`).classList.toggle('active',i===n);
@@ -1176,35 +937,34 @@ function goTab(n){
   });
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
 function startNewProject(){
-  measurements=[];imgEl=null;imgDataURL=null;imgFile=null;currentPlan=null;chatHistory=[];
+  measurements=[];imgEl=null;imgDataURL=null;currentPlan=null;chatHistory=[];
   document.getElementById('desc').value='';
+  try{document.getElementById('fileInput').value='';document.getElementById('cameraInput').value='';}catch(e){}
   document.getElementById('toMeasure').disabled=true;document.getElementById('genBtn').disabled=false;
-  const prev=document.getElementById('uploadPreview');if(prev){prev.src='';prev.style.display='none';}
-  const done=document.getElementById('uploadDone');if(done)done.style.display='none';
-  const prompt=document.getElementById('uploadPrompt');if(prompt)prompt.style.display='';
+  document.getElementById('uploadPreview').src='';document.getElementById('uploadPreview').style.display='none';
+  document.getElementById('uploadDone').style.display='none';document.getElementById('uploadPrompt').style.display='flex';
   document.getElementById('saveBtn').textContent='💾 Save';document.getElementById('saveBtn').classList.remove('saved');
   ctx.clearRect(0,0,canvas.width,canvas.height);canvas.width=0;canvas.height=0;
-  renderMList();document.getElementById('chatMessages').innerHTML='<div class="msg ai"><div class="msg-ico">🏠</div><div class="msg-bubble">Your plan is ready! Ask me anything — I can adjust the design, swap materials, refine the budget, or walk through any step in more detail.</div></div>';
+  renderMList();
+  document.getElementById('chatMessages').innerHTML='<div class="msg ai"><div class="msg-ico">🏠</div><div class="msg-bubble">Your plan is ready! Ask me anything.</div></div>';
   showView('planner');goTab(0);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// GENERATE
-// ═══════════════════════════════════════════════════════════════
+// ── GENERATE ──────────────────────────────────────────────────
 async function generate(){
   const desc=document.getElementById('desc').value.trim();
   if(!desc){document.getElementById('desc').style.borderColor='var(--red)';setTimeout(()=>document.getElementById('desc').style.borderColor='',1200);return;}
   if(!loc.country){openLoc();return;}
-  const country=COUNTRIES.find(c=>c.id===loc.country);
-  currentCountry=country;
+  const country=COUNTRIES.find(c=>c.id===loc.country);currentCountry=country;
   const isMetric=country.units==='metric';
   document.getElementById('genBtn').disabled=true;
   goTab(3);document.getElementById('loading').classList.add('show');document.getElementById('outDiv').classList.remove('show');
   let di=0;const dt=setInterval(()=>{document.getElementById('ldots').textContent='.'.repeat((di++%3)+1);},480);
-  const measCtx=measurements.length?'\n\nANNOTATED MEASUREMENTS:\n'+measurements.map((m,i)=>`  ${i+1}. ${m.label||'Line'}: ${m.value} (px span: ${Math.round(m.pixelLen)})`).join('\n'):'\n\nNo measurements — estimate from description.';
+  const measCtx=measurements.length?'\n\nANNOTATED MEASUREMENTS:\n'+measurements.map((m,i)=>`  ${i+1}. ${m.label||'Line'}: ${m.value} (px: ${Math.round(m.pixelLen)})`).join('\n'):'\n\nNo measurements — estimate from description.';
   const supStr=Object.entries(country.suppliers).map(([k,v])=>`  ${k}: ${v.join(', ')}`).join('\n');
-  const sys=buildSystemPrompt(country,loc.region,isMetric,supStr);
+  const sys=buildSys(country,loc.region,isMetric,supStr);
   const userContent=[];
   if(imgEl){
     const exp=document.createElement('canvas');exp.width=canvas.width;exp.height=canvas.height;
@@ -1212,195 +972,215 @@ async function generate(){
     measurements.forEach(m=>drawLine(ec,m,false));
     userContent.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:exp.toDataURL('image/jpeg',.88).split(',')[1]}});
   }
-  userContent.push({type:'text',text:`Project: ${desc}${measCtx}\n\nGenerate a precise, scale-accurate plan with itemised cost estimates for ${country.name}.`});
+  userContent.push({type:'text',text:`Project: ${desc}${measCtx}\n\nGenerate a precise plan with itemised cost estimates for ${country.name}.`});
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':localStorage.getItem('hf_apikey')||'','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4500,system:sys,messages:[{role:'user',content:userContent}]})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4500,system:sys,messages:[{role:'user',content:userContent}]})});
     const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
     const raw=data.content.map(b=>b.text||'').join('');
     const plan=JSON.parse(raw.replace(/```json|```/g,'').trim());
     clearInterval(dt);document.getElementById('loading').classList.remove('show');
-    currentPlan=plan;
-    // Seed chat history with the plan context
-    chatHistory=[{role:'user',content:userContent},{role:'assistant',content:raw}];
+    currentPlan=plan;chatHistory=[{role:'user',content:userContent},{role:'assistant',content:raw}];
     renderOut(plan,country,false);
   }catch(err){
     clearInterval(dt);
-    document.getElementById('loading').innerHTML=`<p style="color:var(--red);font-family:'Courier Prime',monospace;font-size:.72rem;">⚠ Error: ${esc(err.message)} — please try again.</p>`;
-    document.getElementById('genBtn').disabled=false;
+    document.getElementById('loading').innerHTML=`<p style="color:var(--red);font-size:.8rem;">&#9888; Error: ${esc(err.message)}</p><button onclick="goTab(2);document.getElementById('loading').classList.remove('show');document.getElementById('genBtn').disabled=false;" style="margin-top:1rem;font-size:.72rem;padding:.45rem .9rem;border:1px solid var(--rule2);background:transparent;color:var(--ink3);cursor:pointer;font-family:inherit;">&#8592; Try Again</button>`;
   }
 }
 
-function buildSystemPrompt(country,region,isMetric,supStr){
+function buildSys(country,region,isMetric,supStr){
   return `You are HomeForge, an expert home improvement and DIY planner for ${country.name} (${region}).
-
-LOCATION: ${country.name}, ${region}
-UNITS: ${country.units} — ALL dimensions must be in ${isMetric?'millimetres (mm) or metres (m)':'feet and inches'}
-CURRENCY: ${country.sym} (${country.currency})
+LOCATION: ${country.name}, ${region} | UNITS: ${country.units} — ALL dimensions in ${isMetric?'mm or m':'feet and inches'} | CURRENCY: ${country.sym}
 STANDARDS: ${country.standards}
 LOCAL SUPPLIERS:\n${supStr}
-
-RULES: All dimensions in ${isMetric?'mm/m':'ft/in'}. Material names use local conventions (${isMetric?'e.g. "90×45 MGP10" not "2×4"':'e.g. standard dimensional lumber names'}). Costs in ${country.sym}. Reference suppliers by name. Follow local codes.
-
-Return ONLY valid JSON (no markdown, no fences):
-{
-  "title": "4-6 word project name",
-  "subtitle": "one-line scope",
-  "time": "e.g. 1-2 weekends",
-  "cost": "${country.sym}XXX–XXX",
-  "difficulty": "★★★☆☆",
-  "blueprint": "detailed ASCII blueprint/elevation with box-drawing chars ─│┌┐└┘├┤┬┴┼═║╔╗╚╝▓░, real dimensions in ${isMetric?'mm/m':'ft/in'}, min 26 lines × 64 chars, labelled elements, scale reference",
-  "blueprintCaption": "short caption",
-  "costItems": [{"name":"item","qty":1,"unit":"each","unitPrice":0,"note":"supplier or spec"}],
-  "materials": [{"qty":"X","name":"local product name with dimensions"}],
-  "suppliers": ["Supplier 1","Supplier 2","Supplier 3"],
-  "steps": [{"title":"title","description":"detailed with ${isMetric?'metric':'imperial'} measurements","tip":"pro tip or code note"}],
-  "notes": ["safety/code note 1","note 2"]
-}`;
+Return ONLY valid JSON (no markdown):
+{"title":"4-6 word name","subtitle":"one-line scope","time":"e.g. 1-2 weekends","cost":"${country.sym}XXX-XXX","difficulty":"★★★☆☆","blueprint":"ASCII blueprint with box-drawing chars, dimensions in ${isMetric?'mm/m':'ft/in'}, min 26 lines x 64 chars, labelled","blueprintCaption":"caption","costItems":[{"name":"item","qty":1,"unit":"each","unitPrice":0,"note":""}],"materials":[{"qty":"X","name":"local product"}],"suppliers":["Supplier 1","Supplier 2"],"steps":[{"title":"title","description":"detailed","tip":"pro tip"}],"notes":["note 1"]}`;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// RENDER OUTPUT
-// ═══════════════════════════════════════════════════════════════
+// ── RENDER OUTPUT ──────────────────────────────────────────────
 function renderOut(p,country,isReload){
   document.getElementById('oTitle').textContent=p.title||'—';
   document.getElementById('oLocTag').textContent=`${loc.region}, ${country.name} · ${country.units} · ${country.sym}`;
-  document.getElementById('oTime').textContent=p.time||'—';
-  document.getElementById('oCost').textContent=p.cost||'—';
+  document.getElementById('oTime').textContent=p.time||'—';document.getElementById('oCost').textContent=p.cost||'—';document.getElementById('oDiff').textContent=p.difficulty||'—';
   const ts=document.getElementById('oTimeStamp');if(ts)ts.textContent=p.time||'—';
   const cs=document.getElementById('oCostStamp');if(cs)cs.textContent=p.cost||'—';
   const inv=document.getElementById('hdrInvNo');if(inv)inv.textContent='HF-'+String(Date.now()).slice(-4);
-  document.getElementById('oDiff').textContent=p.difficulty||'—';
-  document.getElementById('oBp').textContent=p.blueprint||'';
-  document.getElementById('oBpCap').textContent=p.blueprintCaption||'Elevation view';
-
+  document.getElementById('oBp').textContent=p.blueprint||'';document.getElementById('oBpCap').textContent=p.blueprintCaption||'Elevation view';
   if(imgEl){
     document.getElementById('photoSec').style.display='';
     const oc=document.getElementById('oc');
     const mw=Math.min((document.querySelector('#viewPlanner main').clientWidth||800)-24,900);
-    const sc=mw/imgEl.naturalWidth;
-    oc.width=Math.round(imgEl.naturalWidth*sc);oc.height=Math.round(imgEl.naturalHeight*sc);
+    const sc=mw/imgEl.naturalWidth;oc.width=Math.round(imgEl.naturalWidth*sc);oc.height=Math.round(imgEl.naturalHeight*sc);
     const octx=oc.getContext('2d');octx.drawImage(imgEl,0,0,oc.width,oc.height);
-    const ratio=sc/cScale;
-    measurements.forEach(m=>drawLine(octx,{...m,x1:m.x1*ratio,y1:m.y1*ratio,x2:m.x2*ratio,y2:m.y2*ratio},false));
-  } else {document.getElementById('photoSec').style.display='none';}
-
-  // Cost estimator
+    const ratio=sc/cScale;measurements.forEach(m=>drawLine(octx,{...m,x1:m.x1*ratio,y1:m.y1*ratio,x2:m.x2*ratio,y2:m.y2*ratio},false));
+  }else{document.getElementById('photoSec').style.display='none';}
   renderCostTable(p.costItems||[],country.sym);
-
   document.getElementById('oMats').innerHTML=(p.materials||[]).map(m=>`<div class="mat"><span class="mat-qty">${esc(m.qty)}</span><span>${esc(m.name)}</span></div>`).join('');
-
-  const sups=p.suppliers||[];
-  document.getElementById('supLabel').style.display=sups.length?'':'none';
-  document.getElementById('supRegion').textContent=`${loc.region}, ${country.name}`;
-  document.getElementById('supRow').innerHTML=sups.map(s=>`<div class="sup-chip"><span class="sc-dot"></span>${esc(s)}</div>`).join('');
-
-  document.getElementById('oSteps').innerHTML=(p.steps||[]).map((s,i)=>`<div class="step"><div class="step-n">${String(i+1).padStart(2,'0')}</div><div><h4>${esc(s.title)}</h4><p>${esc(s.description)}</p>${s.tip?`<span class="step-tip">💡 ${esc(s.tip)}</span>`:''}</div></div>`).join('');
-  document.getElementById('oNotes').innerHTML=(p.notes||[]).map(n=>`<div class="note"><span style="font-size:.9rem;flex-shrink:0">⚠️</span><p>${esc(n)}</p></div>`).join('');
-
-  // Chat suggestions
-  renderChatSuggestions();
-
+  const sups=p.suppliers||[];document.getElementById('supLabel').style.display=sups.length?'':'none';document.getElementById('supRegion').textContent=`${loc.region}, ${country.name}`;document.getElementById('supRow').innerHTML=sups.map(s=>`<div class="sup-chip"><span class="sc-dot"></span>${esc(s)}</div>`).join('');
+  document.getElementById('oSteps').innerHTML=(p.steps||[]).map((s,i)=>`<div class="step"><div class="step-n">${String(i+1).padStart(2,'0')}</div><div><h4>${esc(s.title)}</h4><p>${esc(s.description)}</p>${s.tip?`<span class="step-tip">&#128161; ${esc(s.tip)}</span>`:''}</div></div>`).join('');
+  document.getElementById('oNotes').innerHTML=(p.notes||[]).map(n=>`<div class="note"><span style="font-size:.9rem;flex-shrink:0">&#9888;&#65039;</span><p>${esc(n)}</p></div>`).join('');
+  renderChatSugs();
   document.getElementById('outDiv').classList.add('show');
-  if(!isReload) document.getElementById('outDiv').scrollIntoView({behavior:'smooth',block:'start'});
+  if(!isReload)document.getElementById('outDiv').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ═══════════════════════════════════════════════════════════════
-// COST ESTIMATOR
-// ═══════════════════════════════════════════════════════════════
+// ── COST ESTIMATOR ─────────────────────────────────────────────
 let costItems=[];
-function renderCostTable(items,sym){
-  costItems=items.map(it=>({...it,id:Date.now()+Math.random()}));
-  rebuildCostTable(sym||currentCountry?.sym||'$');
-}
+function renderCostTable(items,sym){costItems=items.map(it=>({...it,_id:Date.now()+Math.random()}));rebuildCostTable(sym||currentCountry?.sym||'$');}
 function rebuildCostTable(sym){
-  const tbody=document.getElementById('costBody');
-  tbody.innerHTML=costItems.map((it,i)=>`
-    <tr>
-      <td class="item-name">${esc(it.name)}${it.note?`<br><span style="font-family:'Courier Prime',monospace;font-size:.56rem;color:var(--muted)">${esc(it.note)}</span>`:''}` +`</td>
-      <td><input type="number" value="${it.qty}" min="0" step="any" onchange="updateCostRow(${i},'qty',this.value)" style="width:60px"></td>
-      <td><input type="number" value="${it.unitPrice}" min="0" step="any" onchange="updateCostRow(${i},'unitPrice',this.value)" style="width:80px"></td>
-      <td class="line-total">${sym}${(+it.qty*(+it.unitPrice)).toFixed(2)}</td>
-      <td><button class="del-row-btn" onclick="deleteCostRow(${i})">✕</button></td>
-    </tr>`).join('');
+  document.getElementById('costBody').innerHTML=costItems.map((it,i)=>`<tr><td>${esc(it.name)}${it.note?`<br><span style="font-size:.6rem;color:var(--ink4)">${esc(it.note)}</span>`:''}</td><td><input type="number" value="${it.qty}" min="0" step="any" data-i="${i}" data-f="qty"></td><td><input type="number" value="${it.unitPrice}" min="0" step="any" data-i="${i}" data-f="unitPrice"></td><td class="line-total">${sym}${(+it.qty*(+it.unitPrice)).toFixed(2)}</td><td><button class="del-row-btn" data-i="${i}" type="button">&#10005;</button></td></tr>`).join('');
   updateCostTotal(sym);
 }
-function updateCostRow(i,field,val){costItems[i][field]=parseFloat(val)||0;rebuildCostTable(currentCountry?.sym||'$');}
-function deleteCostRow(i){costItems.splice(i,1);rebuildCostTable(currentCountry?.sym||'$');}
-function addCostRow(){costItems.push({id:Date.now(),name:'New item',qty:1,unit:'each',unitPrice:0,note:''});rebuildCostTable(currentCountry?.sym||'$');}
-function updateCostTotal(sym){
-  const total=costItems.reduce((s,it)=>s+(+it.qty*(+it.unitPrice)),0);
-  document.getElementById('costTotal').textContent=`${sym}${total.toFixed(2)}`;
-  if(currentPlan) currentPlan.costItems=costItems;
-}
+function updateCostTotal(sym){const t=costItems.reduce((s,it)=>s+(+it.qty*(+it.unitPrice)),0);document.getElementById('costTotal').textContent=`${sym}${t.toFixed(2)}`;if(currentPlan)currentPlan.costItems=costItems;}
+function addCostRow(){costItems.push({_id:Date.now(),name:'New item',qty:1,unit:'each',unitPrice:0,note:''});rebuildCostTable(currentCountry?.sym||'$');}
 
-// ═══════════════════════════════════════════════════════════════
-// REFINE CHAT
-// ═══════════════════════════════════════════════════════════════
-function renderChatSuggestions(){
-  const sugs=["Make it cheaper","What if I use treated pine?","Show me the build steps in more detail","What are common mistakes?","Add a shelf to the design","How long will materials last?"];
-  document.getElementById('chatSugs').innerHTML=sugs.map(s=>`<div class="sug-chip" onclick="useSug(this)">${s}</div>`).join('');
-}
-function useSug(el){document.getElementById('chatInput').value=el.textContent;sendChat();}
-function chatKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
-
+// ── CHAT ───────────────────────────────────────────────────────
+function renderChatSugs(){document.getElementById('chatSugs').innerHTML=["Make it cheaper","Swap to treated pine","More detail on steps","Common mistakes","Add a shelf","How long will it last?"].map(s=>`<div class="sug-chip sug">${s}</div>`).join('');}
 async function sendChat(){
-  const input=document.getElementById('chatInput');
-  const msg=input.value.trim();if(!msg)return;
-  input.value='';
-  appendMsg('user',msg);
-  document.getElementById('chatSend').disabled=true;
-  document.getElementById('chatTyping').classList.add('show');
-  document.getElementById('chatMessages').scrollTop=99999;
-
-  const country=currentCountry||COUNTRIES[0];
-  const isMetric=country.units==='metric';
+  const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;
+  input.value='';appendMsg('user',msg);
+  document.getElementById('chatSend').disabled=true;document.getElementById('chatTyping').style.display='flex';document.getElementById('chatMessages').scrollTop=99999;
+  const country=currentCountry||COUNTRIES[0];const isMetric=country.units==='metric';
   const supStr=Object.entries(country.suppliers).map(([k,v])=>`  ${k}: ${v.join(', ')}`).join('\n');
-  const sys=buildSystemPrompt(country,loc.region,isMetric,supStr)+'\n\nYou are now in CHAT MODE. The plan has already been generated. Respond conversationally in plain text (not JSON). Help the user refine, adjust, or understand their plan. Keep responses concise and practical.';
-
+  const sys=buildSys(country,loc.region,isMetric,supStr)+'\n\nCHAT MODE: Respond conversationally in plain text (not JSON). Be concise and practical.';
   chatHistory.push({role:'user',content:msg});
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':localStorage.getItem('hf_apikey')||'','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:chatHistory})});
-    const data=await res.json();
-    const reply=data.content.map(b=>b.text||'').join('');
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:chatHistory})});
+    const data=await res.json();const reply=data.content.map(b=>b.text||'').join('');
     chatHistory.push({role:'assistant',content:reply});
-    document.getElementById('chatTyping').classList.remove('show');
-    appendMsg('ai',reply);
-  }catch(err){
-    document.getElementById('chatTyping').classList.remove('show');
-    appendMsg('ai','Sorry, something went wrong. Please try again.');
-  }
+    document.getElementById('chatTyping').style.display='none';appendMsg('ai',reply);
+  }catch{document.getElementById('chatTyping').style.display='none';appendMsg('ai','Sorry, something went wrong. Please try again.');}
   document.getElementById('chatSend').disabled=false;
 }
-
 function appendMsg(role,text){
-  const div=document.createElement('div');
-  div.className=`msg ${role}`;
+  const div=document.createElement('div');div.className=`msg ${role}`;
   div.innerHTML=`<div class="msg-ico">${role==='ai'?'🏠':'👤'}</div><div class="msg-bubble">${esc(text).replace(/\n/g,'<br>')}</div>`;
-  const msgs=document.getElementById('chatMessages');
-  msgs.appendChild(div);msgs.scrollTop=99999;
+  const msgs=document.getElementById('chatMessages');msgs.appendChild(div);msgs.scrollTop=99999;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// PRINT / PDF
-// ═══════════════════════════════════════════════════════════════
-function printPlan(){window.print();}
+// ── EVENT WIRING ───────────────────────────────────────────────
+// All events wired via addEventListener — no inline onclick in HTML
+document.addEventListener('DOMContentLoaded',function(){
+  // Setup
+  document.getElementById('saveKeyBtn').addEventListener('click',saveApiKey);
+  document.getElementById('apiKeyInput').addEventListener('keydown',e=>{if(e.key==='Enter')saveApiKey();});
 
-// ═══════════════════════════════════════════════════════════════
-// API KEY
-// ═══════════════════════════════════════════════════════════════
+  // Header
+  document.getElementById('locBtn').addEventListener('click',openLoc);
+  document.getElementById('logoBtn').addEventListener('click',()=>showView('library'));
+  document.getElementById('hbLib').addEventListener('click',()=>showView('library'));
+  document.getElementById('hbNew').addEventListener('click',startNewProject);
 
+  // Location modal
+  document.getElementById('cancelLocBtn').addEventListener('click',closeLoc);
+  document.getElementById('confirmLocBtn').addEventListener('click',confirmLoc);
+  document.getElementById('countryGrid').addEventListener('click',function(e){
+    const cc=e.target.closest('.cc');if(!cc)return;
+    document.querySelectorAll('.cc').forEach(el=>el.classList.remove('sel'));
+    cc.classList.add('sel');_selC=cc.dataset.id;
+    showRegions(_selC);document.getElementById('confirmLocBtn').disabled=true;_selR=null;
+  });
+  document.getElementById('regionWrap').addEventListener('click',function(e){
+    const rc=e.target.closest('.rc');if(!rc)return;
+    document.querySelectorAll('.rc').forEach(el=>el.classList.remove('sel'));
+    rc.classList.add('sel');_selR=rc.dataset.region;document.getElementById('confirmLocBtn').disabled=false;
+  });
 
+  // Library
+  document.getElementById('libNewBtn').addEventListener('click',startNewProject);
+  document.getElementById('libGrid').addEventListener('click',function(e){
+    const op=e.target.closest('.open-proj');const dp=e.target.closest('.del-proj');
+    if(op){e.stopPropagation();openProject(op.dataset.id);}
+    else if(dp){e.stopPropagation();if(confirm('Delete this project?')){saveProjects(loadProjects().filter(p=>p.id!==dp.dataset.id));renderLibrary();}}
+    else{const card=e.target.closest('.proj-card');if(card)openProject(card.dataset.id);}
+  });
 
-// ═══════════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════════
+  // Step 1
+  document.getElementById('fileInput').addEventListener('change',e=>handleFileLoad(e.target.files[0]));
+  document.getElementById('cameraInput').addEventListener('change',e=>handleFileLoad(e.target.files[0]));
+  document.getElementById('clearPhotoBtn').addEventListener('click',clearPhoto);
+  document.getElementById('skipPhotoChip').addEventListener('click',function(){
+    imgEl=null;imgDataURL=null;document.getElementById('toMeasure').disabled=false;
+    canvas.width=0;canvas.height=0;
+    document.getElementById('toolbar').innerHTML='<span style="font-size:.65rem;color:var(--ink4);font-style:italic;padding:.3rem;">No photo — describe your space in detail in step 3</span>';
+    goTab(1);
+  });
+  document.getElementById('toMeasure').addEventListener('click',()=>goTab(1));
+
+  // Step 2
+  document.getElementById('btnDraw').addEventListener('click',()=>setTool('draw'));
+  document.getElementById('btnSel').addEventListener('click',()=>setTool('select'));
+  document.getElementById('btnClear').addEventListener('click',function(){if(measurements.length&&!confirm('Clear all?'))return;measurements=[];redraw();renderMList();});
+  document.getElementById('backToSpace').addEventListener('click',()=>goTab(0));
+  document.getElementById('toDescribe').addEventListener('click',()=>goTab(2));
+  document.getElementById('mlist').addEventListener('click',function(e){
+    const btn=e.target.closest('.del-meas');if(!btn)return;
+    measurements=measurements.filter(m=>m.id!==+btn.dataset.id);redraw();renderMList();
+  });
+
+  // Measure modal
+  document.getElementById('confirmMBtn').addEventListener('click',confirmM);
+  document.getElementById('cancelMBtn').addEventListener('click',cancelM);
+  document.getElementById('mVal').addEventListener('keydown',e=>{if(e.key==='Enter')confirmM();if(e.key==='Escape')cancelM();});
+
+  // Step 3
+  document.querySelectorAll('.ex-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{document.getElementById('desc').value=EX[chip.textContent.trim()]||chip.textContent;});
+  });
+  document.getElementById('backToMeasure').addEventListener('click',()=>goTab(1));
+  document.getElementById('genBtn').addEventListener('click',generate);
+
+  // Output
+  document.getElementById('saveBtn').addEventListener('click',saveProject);
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+  document.getElementById('backToLib').addEventListener('click',()=>showView('library'));
+  document.getElementById('anotherProject').addEventListener('click',startNewProject);
+  document.getElementById('addItemBtn').addEventListener('click',addCostRow);
+  document.getElementById('costBody').addEventListener('change',function(e){
+    const inp=e.target;if(!inp.dataset.i)return;
+    costItems[+inp.dataset.i][inp.dataset.f]=parseFloat(inp.value)||0;
+    rebuildCostTable(currentCountry?.sym||'$');
+  });
+  document.getElementById('costBody').addEventListener('click',function(e){
+    const btn=e.target.closest('.del-row-btn');if(!btn)return;
+    costItems.splice(+btn.dataset.i,1);rebuildCostTable(currentCountry?.sym||'$');
+  });
+
+  // Chat
+  document.getElementById('chatSend').addEventListener('click',sendChat);
+  document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+  document.getElementById('chatSugs').addEventListener('click',function(e){
+    const chip=e.target.closest('.sug');if(!chip)return;
+    document.getElementById('chatInput').value=chip.textContent;sendChat();
+  });
+
+  // Step tabs (for direct nav)
+  [0,1,2,3].forEach(i=>{document.getElementById(`tab${i}`).addEventListener('click',()=>goTab(i));});
+
+  window.addEventListener('resize',()=>{if(imgEl)initCanvas(imgEl);});
+});
+
+// ── INIT ───────────────────────────────────────────────────────
 function init(){
   loadLoc();updateLocPill();renderLibrary();
   if(!loc.country)openLoc();
 }
-init();
 
-window.addEventListener('resize',()=>{if(imgEl)initCanvas(imgEl);});
+// Run init safely whether DOM is ready or not
+function bootApp(){
+  if(getApiKey()){
+    const ss=document.getElementById('setupScreen');
+    if(ss)ss.classList.add('hidden');
+    init();
+  }
+  // else: setup screen stays visible, init() called from saveApiKey()
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',bootApp);
+} else {
+  bootApp();
+}
+
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
 </body>
