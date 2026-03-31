@@ -440,6 +440,36 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
 .sb-input{width:100%;padding:.6rem .75rem;border:1.5px solid var(--rule2);background:white;font-family:'Roboto Mono',monospace;font-size:.82rem;color:var(--ink);}
 .sb-input:focus{outline:none;border-color:var(--ink2);}
 .sb-btn{width:100%;background:var(--ink);color:var(--paper);border:none;padding:.82rem;font-family:'Special Elite',cursive;font-size:.92rem;cursor:pointer;letter-spacing:.04em;transition:background .18s;}
+
+/* AI RENDERING */
+.rendering-sec{background:var(--paper);border:1.5px solid var(--rule2);margin-bottom:1rem;overflow:hidden;}
+.rendering-sec .sec-hd{background:var(--ink);color:var(--paper);padding:.58rem 1rem;display:flex;align-items:center;gap:.6rem;}
+.rendering-sec .sec-hd h2{font-family:'Libre Baskerville',serif;font-size:.88rem;font-weight:700;}
+.rendering-sec .sh-tag{font-size:.52rem;text-transform:uppercase;letter-spacing:.18em;color:var(--amb2,#e8a85a);}
+.render-body{padding:1rem 1.1rem;}
+.render-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--ink);color:var(--paper);border:none;padding:.82rem;font-family:'Special Elite',cursive;font-size:.95rem;cursor:pointer;transition:background .18s;letter-spacing:.04em;}
+.render-btn:hover{background:var(--ink2);}
+.render-btn:disabled{opacity:.4;cursor:not-allowed;}
+.render-hint{font-size:.7rem;color:var(--ink3);font-style:italic;text-align:center;margin-top:.5rem;}
+.render-result{display:none;margin-top:1rem;}
+.render-result.show{display:block;}
+.render-result img{width:100%;border:1.5px solid var(--rule2);display:block;}
+.render-result .render-caption{font-size:.68rem;color:var(--ink4);font-style:italic;padding:.4rem 0 0;text-align:center;}
+.render-variants{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.65rem;}
+.render-variant{width:calc(50% - .2rem);cursor:pointer;border:2px solid transparent;transition:border-color .15s;}
+.render-variant:hover{border-color:var(--ink2);}
+.render-variant.active{border-color:var(--ink);}
+.render-variant img{width:100%;display:block;}
+.render-loading{display:none;text-align:center;padding:2rem 1rem;}
+.render-loading.show{display:block;}
+.render-spinner{width:32px;height:32px;border:2px solid var(--rule);border-top:2px solid var(--ink);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto .75rem;}
+.render-loading p{font-size:.75rem;color:var(--ink3);font-style:italic;}
+.render-no-key{background:var(--paper2);border:1px solid var(--rule2);border-left:3px solid var(--amber,#c8833a);padding:.65rem .85rem;font-size:.75rem;color:var(--ink2);line-height:1.55;}
+.render-no-key a{color:var(--ink);font-weight:700;text-decoration:underline;cursor:pointer;}
+.style-row{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.75rem;}
+.style-chip{font-size:.62rem;border:1.5px solid var(--rule2);padding:.22rem .55rem;cursor:pointer;font-family:'Roboto Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);transition:all .14s;background:transparent;}
+.style-chip:hover{border-color:var(--ink2);color:var(--ink);}
+.style-chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
 </style>
 </head>
 <body>
@@ -451,7 +481,8 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
     <p class="sb-intro">To generate plans, HomeForge needs your Anthropic API key. Stored only on this device, sent directly to Anthropic.</p>
     <div class="sb-help">Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> &rarr; API Keys &rarr; Create Key.<br>Starts with <strong>sk-ant-...</strong> &nbsp;&middot;&nbsp; Cost ~$0.002 per plan.</div>
     <div class="sb-err" id="setupErr">&#9888; Key should start with sk-ant-</div>
-    <div class="sb-field"><label class="sb-label">Anthropic API Key</label><input type="password" class="sb-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false"></div>
+    <div class="sb-field"><label class="sb-label">Anthropic API Key <span style="color:var(--red)">*</span></label><input type="password" class="sb-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false"></div>
+    <div class="sb-field"><label class="sb-label">Stability AI Key <span style="font-style:italic;opacity:.6;">(optional — for photo renderings)</span></label><input type="password" class="sb-input" id="stabilityKeyInput" placeholder="sk-..." autocomplete="off" spellcheck="false"></div>
     <button class="sb-btn" id="saveKeyBtn">Save &amp; Open HomeForge &rarr;</button>
   </div>
 </div>
@@ -623,6 +654,35 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
           <div class="sec-hd"><span class="sh-tag">SHEET // A-01</span><h2>Blueprint Rendering</h2></div>
           <div class="sec-bd" style="padding:0;"><div class="bp-pre" id="oBp">&#8212;</div><div class="bp-cap" id="oBpCap">Elevation view</div></div>
         </div>
+
+        <div class="rendering-sec" id="renderingSec">
+          <div class="sec-hd"><span class="sh-tag">SHEET // A-02</span><h2>AI Photo Rendering</h2></div>
+          <div class="render-body">
+            <div id="renderNoKey" class="render-no-key" style="display:none;">
+              No Stability AI key saved. <a onclick="showStabilitySetup()">Add your key</a> to enable photorealistic renderings &mdash; free at <strong>platform.stability.ai</strong>
+            </div>
+            <div id="renderControls">
+              <div class="style-row" id="styleRow">
+                <div class="style-chip on" data-style="photorealistic architectural render, professional photography">Photorealistic</div>
+                <div class="style-chip" data-style="watercolour architectural illustration, artistic">Watercolour</div>
+                <div class="style-chip" data-style="pencil sketch architectural drawing, hand drawn">Sketch</div>
+                <div class="style-chip" data-style="3D render, modern architectural visualisation">3D Render</div>
+              </div>
+              <button class="render-btn" id="renderBtn" type="button">&#10024; Generate Photo Rendering</button>
+              <p class="render-hint">Uses Stability AI &middot; ~1&ndash;4 credits per image</p>
+            </div>
+            <div class="render-loading" id="renderLoading">
+              <div class="render-spinner"></div>
+              <p>Generating your rendering&hellip;</p>
+            </div>
+            <div class="render-result" id="renderResult">
+              <img id="renderImg" src="" alt="AI rendering">
+              <div class="render-caption" id="renderCaption"></div>
+              <div class="render-variants" id="renderVariants"></div>
+              <button class="render-btn" id="renderAgainBtn" type="button" style="margin-top:.75rem;font-size:.78rem;padding:.55rem;">&#8635; Generate Another</button>
+            </div>
+          </div>
+        </div>
         <div class="sec">
           <div class="sec-hd"><span class="sh-tag">SHEET // B-01</span><h2>Cost Estimator</h2></div>
           <div class="sec-bd">
@@ -768,6 +828,8 @@ function saveApiKey(){
   if(!k.startsWith('sk-ant-')){err.style.display='block';return;}
   err.style.display='none';
   localStorage.setItem('hf_apikey',k);
+  const sk=document.getElementById('stabilityKeyInput');
+  if(sk&&sk.value.trim())localStorage.setItem('hf_stability_key',sk.value.trim());
   const ss=document.getElementById('setupScreen');
   if(ss)ss.parentNode.removeChild(ss);
   init();
@@ -812,6 +874,10 @@ function openProject(id){
   else{imgEl=null;imgDataURL=null;}
   measurements=p.measurements||[];
   document.getElementById('desc').value=p.description||'';
+  if(p.plan&&p.plan.renderingDataURL){
+    const ri=document.getElementById('renderImg');
+    if(ri){ri.src=p.plan.renderingDataURL;document.getElementById('renderResult').classList.add('show');}
+  }
   showView('planner');goTab(3);
   document.getElementById('loading').classList.remove('show');
   renderOut(p.plan,currentCountry,true);
@@ -1102,6 +1168,7 @@ function renderOut(p,country,isReload){
   document.getElementById('oSteps').innerHTML=(p.steps||[]).map((s,i)=>`<div class="step"><div class="step-n">${String(i+1).padStart(2,'0')}</div><div><h4>${esc(s.title)}</h4><p>${esc(s.description)}</p>${s.tip?`<span class="step-tip">&#128161; ${esc(s.tip)}</span>`:''}</div></div>`).join('');
   document.getElementById('oNotes').innerHTML=(p.notes||[]).map(n=>`<div class="note"><span style="font-size:.9rem;flex-shrink:0">&#9888;&#65039;</span><p>${esc(n)}</p></div>`).join('');
   renderChatSugs();
+  initRenderingSection();
   document.getElementById('outDiv').classList.add('show');
   if(!isReload){
     document.getElementById('outDiv').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1133,6 +1200,92 @@ function scheduleAutosave(){
       saveProject(true); // silent autosave
     }
   },1500);
+}
+
+
+// ── STABILITY AI ───────────────────────────────────────────────
+function getStabilityKey(){return localStorage.getItem('hf_stability_key')||'';}
+
+function showStabilitySetup(){
+  const key=prompt('Enter your Stability AI API key (get one free at platform.stability.ai):');
+  if(key&&key.trim()){
+    localStorage.setItem('hf_stability_key',key.trim());
+    initRenderingSection();
+  }
+}
+
+let _renderStyle='photorealistic architectural render, professional photography';
+
+function initRenderingSection(){
+  const hasKey=!!getStabilityKey();
+  const noKey=document.getElementById('renderNoKey');
+  const controls=document.getElementById('renderControls');
+  if(noKey)noKey.style.display=hasKey?'none':'';
+  if(controls)controls.style.display=hasKey?'':'none';
+}
+
+function buildRenderPrompt(){
+  if(!currentPlan)return '';
+  const country=currentCountry||COUNTRIES[0];
+  const desc=document.getElementById('desc').value||'';
+  const measStr=measurements.length?measurements.map(m=>`${m.value}${m.label?' '+m.label:''}`).join(', '):'';
+  return `${currentPlan.title}, ${desc.slice(0,120)}, ${country.region} ${country.name} residential project${measStr?', dimensions: '+measStr:''}, ${_renderStyle}, high quality, detailed, natural lighting, realistic materials`;
+}
+
+async function generateRendering(){
+  const key=getStabilityKey();
+  if(!key){showStabilitySetup();return;}
+
+  const prompt=buildRenderPrompt();
+  document.getElementById('renderLoading').classList.add('show');
+  document.getElementById('renderResult').classList.remove('show');
+  document.getElementById('renderBtn').disabled=true;
+
+  try{
+    const res=await fetch('https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json',
+        'Authorization':`Bearer ${key}`
+      },
+      body:JSON.stringify({
+        text_prompts:[
+          {text:prompt, weight:1},
+          {text:'blurry, cartoon, unrealistic, ugly, low quality, distorted, people, humans', weight:-1}
+        ],
+        cfg_scale:7,
+        height:768,
+        width:1344,
+        samples:1,
+        steps:30,
+      })
+    });
+
+    if(!res.ok){
+      const err=await res.json();
+      throw new Error(err.message||`API error ${res.status}`);
+    }
+
+    const data=await res.json();
+    const imgData=data.artifacts[0].base64;
+    const imgSrc=`data:image/png;base64,${imgData}`;
+
+    document.getElementById('renderImg').src=imgSrc;
+    document.getElementById('renderCaption').textContent=`"${prompt.slice(0,80)}…"`;
+    document.getElementById('renderLoading').classList.remove('show');
+    document.getElementById('renderResult').classList.add('show');
+
+    // Save render to current plan
+    if(currentPlan){
+      currentPlan.renderingDataURL=imgSrc;
+      scheduleAutosave();
+    }
+  }catch(err){
+    document.getElementById('renderLoading').classList.remove('show');
+    alert('Rendering failed: '+err.message+'. Check your Stability AI key and credits.');
+  }
+  document.getElementById('renderBtn').disabled=false;
 }
 
 // ── CHAT ───────────────────────────────────────────────────────
@@ -1251,6 +1404,14 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('spSaveBtn').addEventListener('click',()=>saveProject(false));
   document.getElementById('spDismissBtn').addEventListener('click',()=>document.getElementById('savePrompt').classList.remove('show'));
   document.getElementById('printBtn').addEventListener('click',()=>window.print());
+  document.getElementById('renderBtn').addEventListener('click',generateRendering);
+  document.getElementById('renderAgainBtn').addEventListener('click',generateRendering);
+  document.getElementById('styleRow').addEventListener('click',function(e){
+    const chip=e.target.closest('.style-chip');if(!chip)return;
+    document.querySelectorAll('.style-chip').forEach(c=>c.classList.remove('on'));
+    chip.classList.add('on');
+    _renderStyle=chip.dataset.style;
+  });
   document.getElementById('backToLib').addEventListener('click',()=>showView('library'));
   document.getElementById('anotherProject').addEventListener('click',startNewProject);
   document.getElementById('addItemBtn').addEventListener('click',addCostRow);
