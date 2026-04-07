@@ -1304,6 +1304,7 @@ async function generateRendering(){
 
       const form=new FormData();
       form.append('image', imgBlob, 'space.png');
+      form.append('mode', 'image-to-image');
       form.append('prompt', prompt);
       form.append('negative_prompt', 'blurry, cartoon, ugly, low quality, distorted, people, text, watermark');
       // Slider: user sets 10-80% "change amount" → map to strength 0.1–0.8
