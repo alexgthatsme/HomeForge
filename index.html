@@ -1259,12 +1259,11 @@ function initRenderingSection(){
     if(imgEl){
       hint.innerHTML='&#128247; Will transform your uploaded photo &middot; ~2 credits';
       hint.style.color='var(--green)';
-      if(srow)srow.style.display='';
     } else {
-      hint.textContent='No photo — will generate from description · ~2 credits';
-      hint.style.color='';
-      if(srow)srow.style.display='none';
+      hint.innerHTML='&#9888; Upload a photo in Step 1 to enable rendering';
+      hint.style.color='var(--ink3)';
     }
+    if(srow)srow.style.display=imgEl?'':'none';
   }
 }
 
@@ -1280,112 +1279,67 @@ async function generateRendering(){
   const key=getStabilityKey();
   if(!key){showStabilitySetup();return;}
 
+  // Require a photo for image-to-image
+  if(!imgEl){
+    alert('Please upload a photo of your space first (Step 1). HomeForge uses your photo as the base for the rendering.');
+    return;
+  }
+
   const prompt=buildRenderPrompt();
   document.getElementById('renderLoading').classList.add('show');
   document.getElementById('renderResult').classList.remove('show');
   document.getElementById('renderBtn').disabled=true;
 
   try{
-    let res, data;
+    // Resize photo to max 1024px
+    const maxDim=1024;
+    const scale=Math.min(maxDim/imgEl.naturalWidth, maxDim/imgEl.naturalHeight, 1);
+    const w=Math.round(imgEl.naturalWidth*scale);
+    const h=Math.round(imgEl.naturalHeight*scale);
+    const srcCanvas=document.createElement('canvas');
+    srcCanvas.width=w; srcCanvas.height=h;
+    srcCanvas.getContext('2d').drawImage(imgEl,0,0,w,h);
+    const imgBlob=await new Promise(res=>srcCanvas.toBlob(res,'image/png',0.92));
 
-    if(imgEl){
-      // ── IMAGE-TO-IMAGE via newer v2beta endpoint ─────────────
-      // Resize photo to fit within 1024px on longest side
-      const maxDim=1024;
-      const scale=Math.min(maxDim/imgEl.naturalWidth, maxDim/imgEl.naturalHeight, 1);
-      const w=Math.round(imgEl.naturalWidth*scale);
-      const h=Math.round(imgEl.naturalHeight*scale);
-      const srcCanvas=document.createElement('canvas');
-      srcCanvas.width=w; srcCanvas.height=h;
-      srcCanvas.getContext('2d').drawImage(imgEl,0,0,w,h);
+    const sliderEl=document.getElementById('strengthSlider');
+    const strength=sliderEl?(+sliderEl.value/100).toFixed(2):'0.65';
 
-      // Canvas to blob
-      const imgBlob=await new Promise(res=>srcCanvas.toBlob(res,'image/png',0.92));
+    const form=new FormData();
+    form.append('mode','image-to-image');
+    form.append('image',imgBlob,'space.png');
+    form.append('prompt',prompt);
+    form.append('negative_prompt','blurry, cartoon, ugly, low quality, distorted, people, text, watermark');
+    form.append('strength',strength);
+    form.append('output_format','png');
 
-      const form=new FormData();
-      form.append('image', imgBlob, 'space.png');
-      form.append('mode', 'image-to-image');
-      form.append('prompt', prompt);
-      form.append('negative_prompt', 'blurry, cartoon, ugly, low quality, distorted, people, text, watermark');
-      // Slider: user sets 10-80% "change amount" → map to strength 0.1–0.8
-      const sliderEl=document.getElementById('strengthSlider');
-      const strength=sliderEl?(+sliderEl.value/100).toFixed(2):'0.65';
-      form.append('strength', strength); // 0=keep photo, 1=ignore photo
-      form.append('output_format', 'png');
-
-      res=await fetch('https://api.stability.ai/v2beta/stable-image/generate/sd3',{
-        method:'POST',
-        headers:{
-          'Accept':'image/*',
-          'Authorization':`Bearer ${key}`
-        },
-        body:form
-      });
-
-      if(!res.ok){
-        const errText=await res.text();
-        throw new Error(errText||`API error ${res.status}`);
-      }
-
-      // v2beta returns raw image bytes, not JSON
-      const blob=await res.blob();
-      const imgSrc=await new Promise(resolve=>{
-        const reader=new FileReader();
-        reader.onload=()=>resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-
-      const modeLabel='Generated from your photo';
-      document.getElementById('renderImg').src=imgSrc;
-      document.getElementById('renderCaption').textContent=`${modeLabel} · "${prompt.slice(0,70)}…"`;
-      document.getElementById('renderLoading').classList.remove('show');
-      document.getElementById('renderResult').classList.add('show');
-      if(currentPlan){currentPlan.renderingDataURL=imgSrc;scheduleAutosave();}
-      document.getElementById('renderBtn').disabled=false;
-      return; // exit early — v2beta flow complete
-
-    } else {
-      // ── TEXT-TO-IMAGE: no photo uploaded ────────────────────
-      res=await fetch('https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${key}`
-        },
-        body:JSON.stringify({
-          text_prompts:[
-            {text:prompt, weight:1},
-            {text:'blurry, cartoon, unrealistic, ugly, low quality, distorted, people, humans', weight:-1}
-          ],
-          cfg_scale:7,
-          height:768,
-          width:1344,
-          samples:1,
-          steps:30,
-        })
-      });
-    }
+    const res=await fetch('https://api.stability.ai/v2beta/stable-image/generate/sd3',{
+      method:'POST',
+      headers:{
+        'Accept':'image/*',
+        'Authorization':`Bearer ${key}`
+      },
+      body:form
+    });
 
     if(!res.ok){
-      const err=await res.json();
-      throw new Error(err.message||`API error ${res.status}`);
+      const errText=await res.text();
+      throw new Error(errText||`API error ${res.status}`);
     }
 
-    data=await res.json();
-    const imgData=data.artifacts[0].base64;
-    const imgSrc=`data:image/png;base64,${imgData}`;
+    const blob=await res.blob();
+    const imgSrc=await new Promise(resolve=>{
+      const reader=new FileReader();
+      reader.onload=()=>resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
 
-    const modeLabel=imgEl?'Generated from your photo':'Generated from description';
     document.getElementById('renderImg').src=imgSrc;
-    document.getElementById('renderCaption').textContent=`${modeLabel} · "${prompt.slice(0,70)}…"`;
+    document.getElementById('renderCaption').textContent=`Generated from your photo · "${prompt.slice(0,70)}…"`;
     document.getElementById('renderLoading').classList.remove('show');
     document.getElementById('renderResult').classList.add('show');
 
-    if(currentPlan){
-      currentPlan.renderingDataURL=imgSrc;
-      scheduleAutosave();
-    }
+    if(currentPlan){currentPlan.renderingDataURL=imgSrc;scheduleAutosave();}
+
   }catch(err){
     document.getElementById('renderLoading').classList.remove('show');
     alert('Rendering failed: '+err.message+'. Check your Stability AI key and credits at platform.stability.ai');
