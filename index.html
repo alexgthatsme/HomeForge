@@ -287,4 +287,1264 @@ textarea::placeholder{color:var(--ink4);font-style:italic;}
 .cost-table input[type=number]:focus{outline:none;border-color:var(--rule2);background:white;}
 .line-total{font-size:.75rem;font-weight:700;color:var(--ink);text-align:right;}
 .cost-footer{display:flex;justify-content:flex-end;align-items:center;gap:1.25rem;padding:.75rem .5rem .25rem;border-top:2px solid var(--ink2);margin-top:.25rem;}
-.cost-label{font-size:.65rem;text-transform:uppercas
+.cost-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);}
+.cost-total{font-family:'Special Elite',cursive;font-size:1.4rem;color:var(--ink);}
+.add-item-btn{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;padding:.3rem .65rem;border:1px dashed var(--rule2);background:transparent;color:var(--ink4);cursor:pointer;transition:all .14s;margin-top:.5rem;font-family:'Roboto Mono',monospace;}
+.add-item-btn:hover{border-color:var(--ink2);color:var(--ink);}
+.del-row-btn{background:none;border:none;cursor:pointer;color:var(--ink4);font-size:.8rem;}
+.del-row-btn:hover{color:var(--red);}
+
+.sup-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink4);margin-top:.75rem;margin-bottom:.4rem;}
+.supplier-row{display:flex;flex-wrap:wrap;gap:.35rem;}
+.sup-chip{display:flex;align-items:center;gap:.3rem;border:1px solid var(--rule2);padding:.28rem .6rem;font-size:.65rem;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase;}
+.sc-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.mat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:.38rem;}
+.mat{display:flex;gap:.4rem;padding:.48rem .62rem;background:var(--paper2);border-left:2px solid var(--ink2);font-size:.75rem;align-items:flex-start;}
+.mat-qty{font-size:.68rem;font-weight:700;color:var(--ink);white-space:nowrap;min-width:32px;}
+
+.step{display:grid;grid-template-columns:2rem 1fr;gap:.85rem;padding:.85rem 0;border-bottom:1px dashed var(--rule);}
+.step:last-child{border:none;}
+.step-n{width:2rem;height:2rem;border:1.5px solid var(--rule2);color:var(--ink3);font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step h4{font-family:'Libre Baskerville',serif;font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:.25rem;}
+.step p{font-size:.78rem;color:var(--ink2);line-height:1.65;}
+.step-tip{display:inline-flex;align-items:flex-start;gap:.3rem;margin-top:.4rem;font-size:.7rem;color:var(--green);border:1px solid rgba(26,92,42,.25);padding:.25rem .5rem;font-style:italic;}
+
+.note{display:flex;gap:.55rem;padding:.65rem .82rem;background:var(--paper2);border-left:3px solid var(--red);margin-bottom:.45rem;}
+.note p{font-size:.76rem;color:var(--ink2);line-height:1.55;}
+
+/* ── CHAT ── */
+.chat-panel{border:1.5px solid var(--rule2);background:var(--paper);margin-bottom:1rem;overflow:hidden;}
+.chat-hd{padding:.65rem 1rem;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:.5rem;background:var(--paper2);}
+.chat-hd h2{font-family:'Libre Baskerville',serif;font-size:.88rem;font-weight:700;color:var(--ink);}
+.ch-tag{font-size:.5rem;text-transform:uppercase;letter-spacing:.18em;color:var(--ink4);}
+.chat-messages{padding:.85rem 1rem;max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:.6rem;}
+.msg{display:flex;gap:.5rem;align-items:flex-start;}
+.msg.user{flex-direction:row-reverse;}
+.msg-bubble{max-width:82%;padding:.6rem .82rem;font-size:.78rem;line-height:1.6;}
+.msg.ai .msg-bubble{background:var(--paper2);border:1px solid var(--rule);color:var(--ink2);}
+.msg.user .msg-bubble{background:var(--ink);color:var(--paper);}
+.msg-ico{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;margin-top:.1rem;border:1px solid var(--rule);}
+.chat-input-row{display:flex;border-top:1px solid var(--rule);background:var(--paper2);}
+.chat-input{flex:1;padding:.7rem .9rem;border:none;background:transparent;font-family:'Roboto Mono',monospace;font-size:.8rem;color:var(--ink);outline:none;resize:none;min-height:42px;max-height:100px;}
+.chat-input::placeholder{color:var(--ink4);font-style:italic;}
+.chat-send{background:var(--ink);color:var(--paper);border:none;padding:.7rem 1rem;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:background .18s;flex-shrink:0;font-family:'Roboto Mono',monospace;}
+.chat-send:hover{background:var(--ink2);}
+.chat-send:disabled{opacity:.4;cursor:not-allowed;}
+.chat-typing{display:none;align-items:center;gap:.3rem;padding:.5rem 1rem;}
+.chat-typing.show{display:flex;}
+.ct-dot{width:5px;height:5px;background:var(--ink4);border-radius:50%;animation:tdot 1.2s infinite;}
+.ct-dot:nth-child(2){animation-delay:.2s;}.ct-dot:nth-child(3){animation-delay:.4s;}
+@keyframes tdot{0%,60%,100%{opacity:.2}30%{opacity:1}}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:.3rem;padding:.55rem .9rem;border-top:1px solid var(--rule);}
+.sug-chip{font-size:.62rem;color:var(--ink3);border:1px solid var(--rule);padding:.2rem .5rem;cursor:pointer;transition:all .13s;text-transform:uppercase;letter-spacing:.06em;font-family:'Roboto Mono',monospace;}
+.sug-chip:hover{border-color:var(--ink2);color:var(--ink);background:var(--paper2);}
+
+/* ── LOCATION MODAL ── */
+.loc-overlay{display:none;position:fixed;inset:0;background:rgba(28,23,16,.6);z-index:200;align-items:flex-start;justify-content:center;padding-top:60px;}
+.loc-overlay.open{display:flex;}
+.loc-modal{background:var(--paper);border:2px solid var(--ink2);width:520px;max-width:96vw;max-height:82vh;overflow-y:auto;box-shadow:5px 5px 0 var(--ink3);animation:slideDown .2s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.loc-hd{padding:1.1rem 1.4rem .9rem;border-bottom:2px solid var(--ink2);background:var(--ink);}
+.loc-hd h2{font-family:'Special Elite',cursive;font-size:1.1rem;color:var(--paper);letter-spacing:.04em;}
+.loc-hd p{font-size:.65rem;color:rgba(245,240,232,.5);margin-top:.18rem;text-transform:uppercase;letter-spacing:.1em;}
+.loc-body{padding:1.1rem 1.4rem 1.4rem;}
+.loc-section{margin-bottom:1.1rem;}
+.loc-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.18em;color:var(--ink3);margin-bottom:.5rem;}
+.country-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:.38rem;}
+.cc{border:1.5px solid var(--rule2);background:var(--paper2);padding:.62rem;cursor:pointer;transition:all .16s;display:flex;flex-direction:column;align-items:center;gap:.22rem;text-align:center;}
+.cc:hover{border-color:var(--ink2);background:var(--paper);}
+.cc.sel{border-color:var(--ink);background:var(--paper3);box-shadow:inset 0 0 0 1px var(--ink);}
+.cc-flag{font-size:1.4rem;}
+.cc-name{font-size:.62rem;font-weight:700;color:var(--ink);letter-spacing:.02em;}
+.cc-units{font-size:.55rem;color:var(--ink4);}
+.region-wrap{display:flex;flex-wrap:wrap;gap:.32rem;}
+.rc{border:1.5px solid var(--rule);background:var(--paper2);padding:.28rem .65rem;cursor:pointer;font-size:.68rem;color:var(--ink3);transition:all .14s;font-family:'Roboto Mono',monospace;}
+.rc:hover{border-color:var(--ink2);color:var(--ink);}
+.rc.sel{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+.loc-footer{display:flex;justify-content:flex-end;gap:.45rem;padding:.9rem 1.4rem;border-top:1px solid var(--rule);}
+.btn{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;padding:.48rem .9rem;border:1.5px solid;cursor:pointer;transition:all .14s;font-family:'Roboto Mono',monospace;}
+.bp-btn{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.bp-btn:hover{background:var(--ink2);}
+.bs-btn{background:transparent;color:var(--ink3);border-color:var(--rule2);}
+.bs-btn:hover{border-color:var(--ink2);color:var(--ink);}
+
+/* ── MEASURE MODAL ── */
+.m-overlay{display:none;position:fixed;inset:0;background:rgba(28,23,16,.6);z-index:300;align-items:center;justify-content:center;}
+.m-overlay.open{display:flex;}
+.mmodal{background:var(--paper);border:2px solid var(--ink2);padding:1.5rem;width:300px;max-width:92vw;box-shadow:4px 4px 0 var(--ink3);}
+.mmodal h3{font-family:'Libre Baskerville',serif;font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:.14rem;}
+.msub2{font-size:.65rem;color:var(--ink3);margin-bottom:.82rem;font-style:italic;}
+.mrow{display:grid;grid-template-columns:1fr 90px;gap:.5rem;margin-bottom:.82rem;}
+.mmodal input{width:100%;padding:.55rem .68rem;border:1.5px solid var(--rule2);background:white;font-family:'Roboto Mono',monospace;font-size:.85rem;color:var(--ink);}
+.mmodal input:focus{outline:none;border-color:var(--ink2);}
+.munit-hint{font-size:.65rem;color:var(--ink3);font-style:italic;margin-bottom:.5rem;}
+.mbtns{display:flex;gap:.4rem;justify-content:flex-end;}
+
+/* ── PRINT ── */
+@media print{
+  .setup-screen,.loc-overlay,.m-overlay,header,.step-nav,.chat-panel,.out-actions,.nav-row,.hdr-btn,.loc-pill,.api-reset{display:none!important;}
+  body{background:white;}
+  .out{display:block!important;}
+  .sec{break-inside:avoid;}
+  main{padding:0;max-width:100%;}
+  .view{display:block!important;}
+  #viewLibrary{display:none!important;}
+  .bp-pre{background:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+@media(max-width:580px){
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .mat-grid{grid-template-columns:1fr;}
+  .mrow{grid-template-columns:1fr;}
+  .country-grid{grid-template-columns:repeat(3,1fr);}
+  .out-hdr-body{grid-template-columns:1fr;}
+  .out-hdr-stamps{flex-direction:row;align-items:flex-start;}
+  .lib-grid{grid-template-columns:1fr;}
+  header{padding:0;}
+  main{padding:1.5rem 1rem 5rem;}
+  .hdr-left{padding:.65rem .9rem;gap:.75rem;flex-wrap:wrap;}
+  .hdr-right{padding:.55rem .9rem;gap:.4rem;}
+  .hdr-logo-mark .hlm-name{font-size:1.1rem;}
+  .hdr-divider{display:none;}
+  .hdr-invoice-meta{min-width:0;}
+  .him-val{font-size:.65rem;}
+  .hdr-btn{padding:.3rem .55rem;font-size:.58rem;}
+  .api-reset{padding:.25rem .45rem;}
+}
+
+/* SAVE PROMPT BANNER */
+.save-prompt{display:none;background:var(--paper2);border:1.5px solid var(--rule2);border-left:3px solid var(--green);padding:.65rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+.save-prompt.show{display:flex;}
+.save-prompt p{font-size:.78rem;color:var(--ink2);flex:1;font-style:italic;}
+.save-prompt-btns{display:flex;gap:.4rem;}
+.sp-btn{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;padding:.32rem .65rem;border:1.5px solid;background:transparent;cursor:pointer;font-family:'Roboto Mono',monospace;transition:all .14s;}
+.sp-save{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.sp-save:hover{background:var(--ink2);}
+.sp-dismiss{color:var(--ink4);border-color:var(--rule2);}
+.sp-dismiss:hover{border-color:var(--ink2);color:var(--ink);}
+
+/* SETUP SCREEN */
+.setup-screen{position:fixed;inset:0;background:rgba(28,23,16,.82);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.setup-screen.hidden{display:none!important;}
+.setup-box{background:var(--paper);border:2px solid var(--ink2);padding:2rem;width:420px;max-width:100%;position:relative;box-shadow:4px 4px 0 var(--ink3);}
+.setup-box::before{content:'CONFIDENTIAL';position:absolute;top:.6rem;right:.8rem;font-family:'Special Elite',cursive;font-size:.6rem;color:var(--red);letter-spacing:.2em;opacity:.35;}
+.sb-logo{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:2px solid var(--ink2);}
+.sb-ico{width:38px;height:38px;border:2px solid var(--ink2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.sb-logo h2{font-family:'Special Elite',cursive;font-size:1.4rem;color:var(--ink);letter-spacing:.02em;}
+.sb-logo p{font-size:.58rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.14em;margin-top:.12rem;}
+.sb-intro{font-size:.78rem;color:var(--ink2);line-height:1.65;margin-bottom:.9rem;}
+.sb-help{font-size:.75rem;color:var(--ink3);line-height:1.6;margin-bottom:.9rem;padding:.65rem .82rem;background:var(--paper2);border-left:3px solid var(--ink3);}
+.sb-help a{color:var(--blue);text-decoration:underline;}
+.sb-err{font-size:.72rem;color:var(--red);margin-bottom:.6rem;display:none;font-style:italic;}
+.sb-field{margin-bottom:.8rem;}
+.sb-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);display:block;margin-bottom:.28rem;}
+.sb-input{width:100%;padding:.6rem .75rem;border:1.5px solid var(--rule2);background:white;font-family:'Roboto Mono',monospace;font-size:.82rem;color:var(--ink);}
+.sb-input:focus{outline:none;border-color:var(--ink2);}
+.sb-btn{width:100%;background:var(--ink);color:var(--paper);border:none;padding:.82rem;font-family:'Special Elite',cursive;font-size:.92rem;cursor:pointer;letter-spacing:.04em;transition:background .18s;}
+
+/* AI RENDERING */
+.rendering-sec{background:var(--paper);border:1.5px solid var(--rule2);margin-bottom:1rem;overflow:hidden;}
+.rendering-sec .sec-hd{background:var(--ink);color:var(--paper);padding:.58rem 1rem;display:flex;align-items:center;gap:.6rem;}
+.rendering-sec .sec-hd h2{font-family:'Libre Baskerville',serif;font-size:.88rem;font-weight:700;}
+.rendering-sec .sh-tag{font-size:.52rem;text-transform:uppercase;letter-spacing:.18em;color:var(--amb2,#e8a85a);}
+.render-body{padding:1rem 1.1rem;}
+.render-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--ink);color:var(--paper);border:none;padding:.82rem;font-family:'Special Elite',cursive;font-size:.95rem;cursor:pointer;transition:background .18s;letter-spacing:.04em;}
+.render-btn:hover{background:var(--ink2);}
+.render-btn:disabled{opacity:.4;cursor:not-allowed;}
+.render-hint{font-size:.7rem;color:var(--ink3);font-style:italic;text-align:center;margin-top:.5rem;}
+.render-result{display:none;margin-top:1rem;}
+.render-result.show{display:block;}
+.render-result img{width:100%;border:1.5px solid var(--rule2);display:block;}
+.render-result .render-caption{font-size:.68rem;color:var(--ink4);font-style:italic;padding:.4rem 0 0;text-align:center;}
+.render-variants{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.65rem;}
+.render-variant{width:calc(50% - .2rem);cursor:pointer;border:2px solid transparent;transition:border-color .15s;}
+.render-variant:hover{border-color:var(--ink2);}
+.render-variant.active{border-color:var(--ink);}
+.render-variant img{width:100%;display:block;}
+.render-loading{display:none;text-align:center;padding:2rem 1rem;}
+.render-loading.show{display:block;}
+.render-spinner{width:32px;height:32px;border:2px solid var(--rule);border-top:2px solid var(--ink);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto .75rem;}
+.render-loading p{font-size:.75rem;color:var(--ink3);font-style:italic;}
+.render-no-key{background:var(--paper2);border:1px solid var(--rule2);border-left:3px solid var(--amber,#c8833a);padding:.65rem .85rem;font-size:.75rem;color:var(--ink2);line-height:1.55;}
+.render-no-key a{color:var(--ink);font-weight:700;text-decoration:underline;cursor:pointer;}
+.style-row{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.75rem;}
+.style-chip{font-size:.62rem;border:1.5px solid var(--rule2);padding:.22rem .55rem;cursor:pointer;font-family:'Roboto Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);transition:all .14s;background:transparent;}
+.style-chip:hover{border-color:var(--ink2);color:var(--ink);}
+.style-chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div class="setup-screen" id="setupScreen">
+  <div class="setup-box">
+    <div class="sb-logo"><div class="sb-ico">&#127968;</div><div><h2>HomeForge</h2><p>Project Planner</p></div></div>
+    <p class="sb-intro">To generate plans, HomeForge needs your Anthropic API key. Stored only on this device, sent directly to Anthropic.</p>
+    <div class="sb-help">Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> &rarr; API Keys &rarr; Create Key.<br>Starts with <strong>sk-ant-...</strong> &nbsp;&middot;&nbsp; Cost ~$0.002 per plan.</div>
+    <div class="sb-err" id="setupErr">&#9888; Key should start with sk-ant-</div>
+    <div class="sb-field"><label class="sb-label">Anthropic API Key <span style="color:var(--red)">*</span></label><input type="password" class="sb-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false"></div>
+    <div class="sb-field"><label class="sb-label">Stability AI Key <span style="font-style:italic;opacity:.6;">(optional — for photo renderings)</span></label><input type="password" class="sb-input" id="stabilityKeyInput" placeholder="sk-..." autocomplete="off" spellcheck="false"></div>
+    <button class="sb-btn" id="saveKeyBtn">Save &amp; Open HomeForge &rarr;</button>
+  </div>
+</div>
+
+<header>
+  <div class="hdr-invoice">
+    <div class="hdr-left">
+      <div class="hdr-logo-mark" id="logoBtn" style="cursor:pointer;">
+        <div class="hlm-name">HomeForge</div>
+        <div class="hlm-sub">Est. Project Planner</div>
+      </div>
+      <div class="hdr-divider"></div>
+      <div class="hdr-invoice-meta">
+        <div class="him-no">Job No.</div>
+        <div class="him-val" id="hdrInvNo">HF-001</div>
+      </div>
+      <button class="hdr-loc-btn" id="locBtn" type="button">
+        <div class="him-no">Location &#9998;</div>
+        <div class="him-val" id="hdrLoc"><span id="lpFlag">&#127758;</span> <span id="lpLoc">Set location</span></div>
+      </button>
+    </div>
+    <div class="hdr-right">
+      <button class="hdr-btn active" id="hbLib" type="button">Projects</button>
+      <button class="hdr-btn" id="hbNew" type="button">+ New</button>
+    </div>
+  </div>
+</header>
+
+<div class="view active" id="viewLibrary">
+  <main>
+    <button class="new-project-btn" id="libNewBtn">&#9874; Start New Project</button>
+    <div style="font-size:.75rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">Saved Projects</div>
+    <div id="libGrid" class="lib-grid"></div>
+    <div id="libEmpty" class="lib-empty" style="display:none;">
+      <div class="le-ico">&#128208;</div>
+      <h3>No projects yet</h3>
+      <p>Start a new project to see it saved here</p>
+    </div>
+  </main>
+</div>
+
+<div class="view" id="viewPlanner">
+  <main>
+    <div class="step-nav">
+      <div class="step-tab active" id="tab0"><span class="tn">01 //</span><span class="tl">Space</span></div>
+      <div class="step-tab" id="tab1"><span class="tn">02 //</span><span class="tl">Measure</span></div>
+      <div class="step-tab" id="tab2"><span class="tn">03 //</span><span class="tl">Describe</span></div>
+      <div class="step-tab" id="tab3"><span class="tn">04 //</span><span class="tl">Plan</span></div>
+    </div>
+
+    <div class="panel active" id="panel0">
+      <div class="card">
+        <div class="card-hd"><div class="ctag">// Step 01</div><div class="cttl">Upload a photo of your space</div></div>
+        <div class="card-bd">
+          <div class="upload-zone" id="uploadZone">
+            <div id="uploadPrompt" style="display:flex;flex-direction:column;align-items:center;gap:.5rem;">
+              <div class="uico">&#128247;</div>
+              <h3>Choose a photo of your space</h3>
+              <p>Indoor &middot; Outdoor &middot; Any angle</p>
+              <div class="upload-actions">
+                <label class="upload-label browse">&#128193; Browse Files<input type="file" id="fileInput" accept="image/*"></label>
+                <label class="upload-label camera">&#128247; Take Photo<input type="file" id="cameraInput" accept="image/*" capture="environment"></label>
+              </div>
+              <p style="margin-top:.15rem;font-size:.72rem;color:var(--ink3);">Or drag &amp; drop here</p>
+            </div>
+            <div class="upload-done-row" id="uploadDone">
+              <img class="upload-preview-img" id="uploadPreview" alt="preview">
+              <p style="font-size:.65rem;color:var(--green);">&#10003; Photo loaded</p>
+              <button class="upload-clear" id="clearPhotoBtn">Remove &amp; choose another</button>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span style="font-size:.72rem;color:var(--ink3);">No photo?</span>
+            <div class="chip" id="skipPhotoChip">Skip &#8212; describe only</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-row"><button class="nbtn nnext" id="toMeasure" disabled>Next: Measure &rarr;</button></div>
+    </div>
+
+    <div class="panel" id="panel1">
+      <div class="card">
+        <div class="card-hd"><div class="ctag">// Step 02</div><div class="cttl">Draw measurement lines on your photo</div></div>
+        <div class="card-bd" style="padding:0;">
+          <div class="toolbar" id="toolbar">
+            <button class="tbtn on" id="btnDraw" type="button">&#9999; Draw</button>
+            <button class="tbtn" id="btnSel" type="button">&#8598; Select</button>
+            <div class="tsep"></div>
+            <button class="tbtn del" id="btnClear" type="button">&#10005; Clear</button>
+            <span class="ubadge" id="unitBadge">&#8212; units</span>
+            <span class="thint" id="thint">Click two points</span>
+          </div>
+          <div class="cwrap" id="cwrap"><canvas id="mc"></canvas></div>
+          <div style="padding:.78rem 1rem;">
+            <div class="ctag">Measurements</div>
+            <div class="meas-list" id="mlist"><div style="font-size:.65rem;color:var(--ink4);font-style:italic;padding:.32rem 0;">None yet &#8212; draw a line above</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="nbtn nback" id="backToSpace">&#8592; Back</button>
+        <button class="nbtn nnext" id="toDescribe">Next: Describe &rarr;</button>
+      </div>
+    </div>
+
+    <div class="panel" id="panel2">
+      <div class="card">
+        <div class="card-hd"><div class="ctag">// Step 03</div><div class="cttl">Describe your project</div></div>
+        <div class="card-bd">
+          <textarea id="desc" placeholder="What do you want to build or renovate? Include materials, style, or budget. The AI will use your photo, measurements, and location for a precise local plan."></textarea>
+          <div class="chip-row">
+            <span style="font-size:.72rem;color:var(--ink3);">Try:</span>
+            <div class="chip ex-chip">Built-in shelving</div>
+            <div class="chip ex-chip">Deck extension</div>
+            <div class="chip ex-chip">Raised garden bed</div>
+            <div class="chip ex-chip">Cabinet repaint</div>
+            <div class="chip ex-chip">Tile backsplash</div>
+            <div class="chip ex-chip">Pergola</div>
+          </div>
+          <button class="gen-btn" id="genBtn">&#9874; Generate Plan</button>
+        </div>
+      </div>
+      <div class="nav-row"><button class="nbtn nback" id="backToMeasure">&#8592; Back</button></div>
+    </div>
+
+    <div class="panel" id="panel3">
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Drafting your plans<span id="ldots">...</span></p>
+        <p class="lsub">Analysing space &middot; Applying measurements &middot; Sourcing local materials</p>
+      </div>
+      <div class="out" id="outDiv">
+        <div class="save-prompt" id="savePrompt">
+          <p>&#128190; Plan generated &#8212; would you like to save it?</p>
+          <div class="save-prompt-btns">
+            <button class="sp-btn sp-save" id="spSaveBtn" type="button">Save Project</button>
+            <button class="sp-btn sp-dismiss" id="spDismissBtn" type="button">Not now</button>
+          </div>
+        </div>
+        <div class="out-hdr">
+          <div class="out-hdr-top">
+            <span class="out-tag">Job Sheet // HomeForge</span>
+            <div class="out-actions">
+              <button class="oact save-btn" id="saveBtn" type="button">&#128190; Save</button>
+              <button class="oact" id="printBtn" type="button">&#128438; Print</button>
+            </div>
+          </div>
+          <div class="out-hdr-body">
+            <div>
+              <div class="out-ttl" id="oTitle">&#8212;</div>
+              <div class="out-loc-tag" id="oLocTag">&#8212;</div>
+            </div>
+            <div class="out-hdr-stamps">
+              <div class="hdr-stamp">Time<span id="oTimeStamp">&#8212;</span></div>
+              <div class="hdr-stamp">Cost<span id="oCostStamp">&#8212;</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat"><div class="sv" id="oTime">&#8212;</div><div class="sl">Est. Time</div></div>
+          <div class="stat"><div class="sv" id="oCost">&#8212;</div><div class="sl">Est. Cost</div></div>
+          <div class="stat"><div class="sv" id="oDiff">&#8212;</div><div class="sl">Difficulty</div></div>
+        </div>
+        <div class="sec" id="photoSec" style="display:none;">
+          <div class="sec-hd"><span class="sh-tag">SHEET // PHOTO</span><h2>Your Space &#8212; Annotated</h2></div>
+          <div class="sec-bd" style="padding:0;"><div class="photo-wrap"><canvas id="oc"></canvas></div></div>
+        </div>
+        <div class="sec">
+          <div class="sec-hd"><span class="sh-tag">SHEET // A-01</span><h2>Blueprint Rendering</h2></div>
+          <div class="sec-bd" style="padding:0;"><div class="bp-pre" id="oBp">&#8212;</div><div class="bp-cap" id="oBpCap">Elevation view</div></div>
+        </div>
+
+        <div class="rendering-sec" id="renderingSec">
+          <div class="sec-hd"><span class="sh-tag">SHEET // A-02</span><h2>AI Photo Rendering</h2></div>
+          <div class="render-body">
+            <div id="renderNoKey" class="render-no-key" style="display:none;">
+              No Stability AI key saved. <a onclick="showStabilitySetup()">Add your key</a> to enable photorealistic renderings &mdash; free at <strong>platform.stability.ai</strong>
+            </div>
+            <div id="renderControls">
+              <div class="style-row" id="styleRow">
+                <div class="style-chip on" data-style="photorealistic architectural render, professional photography">Photorealistic</div>
+                <div class="style-chip" data-style="watercolour architectural illustration, artistic">Watercolour</div>
+                <div class="style-chip" data-style="pencil sketch architectural drawing, hand drawn">Sketch</div>
+                <div class="style-chip" data-style="3D render, modern architectural visualisation">3D Render</div>
+              </div>
+              <div id="strengthRow" style="display:none;margin-bottom:.65rem;">
+                <label style="font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);display:flex;justify-content:space-between;margin-bottom:.3rem;">
+                  <span>Photo influence</span>
+                  <span id="strengthVal">35%</span>
+                </label>
+                <input type="range" id="strengthSlider" min="10" max="80" value="35" style="width:100%;accent-color:var(--ink);">
+                <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--ink4);font-style:italic;margin-top:.15rem;"><span>More changes</span><span>Keep original</span></div>
+              </div>
+              <button class="render-btn" id="renderBtn" type="button">&#10024; Generate Photo Rendering</button>
+              <p class="render-hint" id="renderHint">Uses Stability AI &middot; ~2 credits per image</p>
+            </div>
+            <div class="render-loading" id="renderLoading">
+              <div class="render-spinner"></div>
+              <p>Generating your rendering&hellip;</p>
+            </div>
+            <div class="render-result" id="renderResult">
+              <img id="renderImg" src="" alt="AI rendering">
+              <div class="render-caption" id="renderCaption"></div>
+              <div class="render-variants" id="renderVariants"></div>
+              <button class="render-btn" id="renderAgainBtn" type="button" style="margin-top:.75rem;font-size:.78rem;padding:.55rem;">&#8635; Generate Another</button>
+            </div>
+          </div>
+        </div>
+        <div class="sec">
+          <div class="sec-hd"><span class="sh-tag">SHEET // B-01</span><h2>Cost Estimator</h2></div>
+          <div class="sec-bd">
+            <table class="cost-table">
+              <thead><tr>
+                <th style="width:38%">Item</th>
+                <th style="width:14%;text-align:right">Qty</th>
+                <th style="width:20%;text-align:right">Unit Price</th>
+                <th style="width:18%;text-align:right">Total</th>
+                <th style="width:10%"></th>
+              </tr></thead>
+              <tbody id="costBody"></tbody>
+            </table>
+            <button class="add-item-btn" id="addItemBtn" type="button">+ Add Item</button>
+            <div class="cost-footer"><span class="cost-label">Estimated Total</span><span class="cost-total" id="costTotal">&#8212;</span></div>
+          </div>
+        </div>
+        <div class="sec">
+          <div class="sec-hd"><span class="sh-tag">SHEET // C-01</span><h2>Materials &amp; Tools</h2></div>
+          <div class="sec-bd"><div class="mat-grid" id="oMats">&#8212;</div><div class="sup-label" id="supLabel" style="display:none;">Where to buy &#8212; <span id="supRegion"></span></div><div class="supplier-row" id="supRow"></div></div>
+        </div>
+        <div class="sec">
+          <div class="sec-hd"><span class="sh-tag">SHEET // D-01</span><h2>Step-by-Step Build Plan</h2></div>
+          <div class="sec-bd" id="oSteps">&#8212;</div>
+        </div>
+        <div class="sec">
+          <div class="sec-hd"><span class="sh-tag">NOTES // E-01</span><h2>Pro Tips &amp; Safety</h2></div>
+          <div class="sec-bd" id="oNotes">&#8212;</div>
+        </div>
+        <div class="chat-panel">
+          <div class="chat-hd"><span class="ch-tag">AI ASSISTANT //</span><h2>Refine Your Plan</h2></div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="msg ai"><div class="msg-ico">&#127968;</div><div class="msg-bubble">Your plan is ready! Ask me anything &#8212; adjust the design, swap materials, refine the budget, or walk through any step.</div></div>
+          </div>
+          <div class="chat-typing" id="chatTyping" style="display:none;align-items:center;gap:.3rem;padding:.5rem 1rem;">
+            <div class="msg-ico">&#127968;</div>
+            <div style="display:flex;gap:.3rem;"><div class="ct-dot"></div><div class="ct-dot"></div><div class="ct-dot"></div></div>
+          </div>
+          <div class="chat-suggestions" id="chatSugs"></div>
+          <div class="chat-input-row">
+            <textarea class="chat-input" id="chatInput" placeholder="Ask anything about your plan&#8230;" rows="1"></textarea>
+            <button class="chat-send" id="chatSend" type="button">Send &rarr;</button>
+          </div>
+        </div>
+        <div class="nav-row">
+          <button class="nbtn nback" id="backToLib">&#8592; All Projects</button>
+          <button class="nbtn nnext" id="anotherProject">+ New Project</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="loc-overlay" id="locOverlay">
+  <div class="loc-modal">
+    <div class="loc-hd"><h2>Where are you working today?</h2><p>// Sets units, standards &amp; local suppliers</p></div>
+    <div class="loc-body">
+      <div class="loc-section"><div class="loc-label">Country</div><div class="country-grid" id="countryGrid"></div></div>
+      <div class="loc-section" id="regionSection" style="display:none;"><div class="loc-label">State / Region</div><div class="region-wrap" id="regionWrap"></div></div>
+    </div>
+    <div class="loc-footer">
+      <button class="btn bs-btn" id="cancelLocBtn" type="button">Cancel</button>
+      <button class="btn bp-btn" id="confirmLocBtn" type="button" disabled>Confirm &#10003;</button>
+    </div>
+  </div>
+</div>
+
+<div class="m-overlay" id="mOverlay">
+  <div class="mmodal">
+    <h3>Label this measurement</h3>
+    <div class="msub2">Enter the real-world dimension</div>
+    <div class="munit-hint" id="munitHint">e.g. 3600 mm &middot; 2.4 m</div>
+    <div class="mrow">
+      <div><label style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);display:block;margin-bottom:.22rem;">Label (optional)</label><input type="text" id="mLbl" placeholder="e.g. Wall width"></div>
+      <div><label style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);display:block;margin-bottom:.22rem;">Dimension *</label><input type="text" id="mVal" placeholder="3600 mm"></div>
+    </div>
+    <div class="mbtns">
+      <button class="btn bs-btn" id="cancelMBtn" type="button">Cancel</button>
+      <button class="btn bp-btn" id="confirmMBtn" type="button">Add &#10003;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const COUNTRIES=[
+  {id:'AU',name:'Australia',flag:'🇦🇺',units:'metric',currency:'AUD',sym:'A$',
+   regions:['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'],
+   suppliers:{general:['Bunnings Warehouse','Mitre 10','Total Tools'],timber:['Bowens','Big River Timbers'],tile:['Beaumont Tiles','Tile Depot','National Tiles'],paint:['Dulux','Taubmans','Haymes Paint'],plumbing:['Reece','Tradelink']},
+   standards:'NCC/BCA. MGP10 framing, 450 or 600mm stud spacing, Class 3 galv hardware externally, AS 1684 timber framing, metric fixings.',
+   unitEx:'3600 mm · 2.4 m · 90×45 mm',dimPh:'e.g. 3600 mm'},
+  {id:'NZ',name:'New Zealand',flag:'🇳🇿',units:'metric',currency:'NZD',sym:'NZ$',
+   regions:['Auckland','Wellington','Canterbury','Waikato','Bay of Plenty','Otago'],
+   suppliers:{general:['Mitre 10','Bunnings NZ','PlaceMakers'],timber:['Carter Holt Harvey'],tile:['Tile Warehouse'],paint:['Resene','Dulux NZ'],plumbing:['Plumbing Plus']},
+   standards:'NZBC. H1.2 treated timber, NZS 3604, 600mm studs, seismic considerations.',
+   unitEx:'3600 mm · 2.4 m · 90×45 mm',dimPh:'e.g. 3600 mm'},
+  {id:'US',name:'United States',flag:'🇺🇸',units:'imperial',currency:'USD',sym:'$',
+   regions:['Northeast','Southeast','Midwest','Southwest','West','Pacific Northwest'],
+   suppliers:{general:['Home Depot',"Lowe's",'Menards'],timber:['84 Lumber'],tile:['Floor & Decor'],paint:['Sherwin-Williams','Benjamin Moore'],plumbing:['Ferguson']},
+   standards:'IRC/IBC. Dimensional lumber (2×4, 2×6), 16" or 24" OC studs, imperial fasteners.',
+   unitEx:'12 ft · 8 ft 6 in · 3.5"',dimPh:'e.g. 12 ft'},
+  {id:'GB',name:'United Kingdom',flag:'🇬🇧',units:'metric',currency:'GBP',sym:'£',
+   regions:['England','Scotland','Wales','Northern Ireland'],
+   suppliers:{general:['Screwfix','B&Q','Wickes','Travis Perkins'],timber:['Jewson','Buildbase'],tile:['Topps Tiles'],paint:['Dulux','Farrow & Ball'],plumbing:['City Plumbing']},
+   standards:'UK Building Regs Parts A-R. CLS/PSE metric timber, 400 or 600mm centres, CE-marked materials.',
+   unitEx:'3600 mm · 2.4 m · 100×50 mm',dimPh:'e.g. 3600 mm'},
+  {id:'CA',name:'Canada',flag:'🇨🇦',units:'imperial',currency:'CAD',sym:'C$',
+   regions:['Ontario','British Columbia','Quebec','Alberta','Manitoba','Nova Scotia'],
+   suppliers:{general:['Home Depot','RONA','Home Hardware'],timber:['Home Hardware Lumber'],tile:['Centura Tile'],paint:['Benjamin Moore'],plumbing:['Wolseley']},
+   standards:'NBC Canada. 2×4/2×6 lumber, 16" OC, CSA-certified materials.',
+   unitEx:'12 ft · 8 ft 6 in · 3.5"',dimPh:'e.g. 12 ft'},
+  {id:'EU',name:'Europe',flag:'🇪🇺',units:'metric',currency:'EUR',sym:'€',
+   regions:['Germany','France','Netherlands','Spain','Italy','Sweden','Belgium','Other'],
+   suppliers:{general:['OBI','Hornbach','Leroy Merlin'],timber:['Hornbach','Bauhaus'],tile:['Hornbach Tiles'],paint:['Caparol','Sto'],plumbing:['Hornbach Plumbing']},
+   standards:'Eurocode (EN) + national annexes. Metric timber, CE-marked, DIN/EN fasteners.',
+   unitEx:'3600 mm · 2.4 m · 100×50 mm',dimPh:'e.g. 3600 mm'},
+];
+
+// ── STATE ──────────────────────────────────────────────────────
+let loc={country:'AU',region:'VIC'};
+let imgEl=null,imgDataURL=null;
+let measurements=[];
+let tool='draw',drawState='idle';
+let ptA=null,ptMouse=null,pending=null,selectedId=null,cScale=1;
+let currentPlan=null,currentCountry=null,chatHistory=[];
+const COLORS=['#e8a85a','#7ec8a0','#7ab8e8','#e87a7a','#c8a0e8','#e8c87a'];
+
+// ── STORAGE ────────────────────────────────────────────────────
+function loadProjects(){try{return JSON.parse(localStorage.getItem('hf_projects')||'[]');}catch{return [];}}
+function saveProjects(a){
+  const str=JSON.stringify(a);
+  localStorage.setItem('hf_projects',str);
+}
+function loadLoc(){try{const s=localStorage.getItem('hf_loc');if(s)loc=JSON.parse(s);}catch{}}
+function saveLoc(){localStorage.setItem('hf_loc',JSON.stringify(loc));}
+function getApiKey(){return localStorage.getItem('hf_apikey')||'';}
+
+// ── API KEY SETUP ──────────────────────────────────────────────
+function saveApiKey(){
+  const k=document.getElementById('apiKeyInput').value.trim();
+  const err=document.getElementById('setupErr');
+  if(!k.startsWith('sk-ant-')){err.style.display='block';return;}
+  err.style.display='none';
+  localStorage.setItem('hf_apikey',k);
+  const sk=document.getElementById('stabilityKeyInput');
+  if(sk&&sk.value.trim())localStorage.setItem('hf_stability_key',sk.value.trim());
+  const ss=document.getElementById('setupScreen');
+  if(ss)ss.parentNode.removeChild(ss);
+  init();
+}
+
+// ── VIEWS ──────────────────────────────────────────────────────
+function showView(v){
+  document.getElementById('viewLibrary').classList.toggle('active',v==='library');
+  document.getElementById('viewPlanner').classList.toggle('active',v==='planner');
+  document.getElementById('hbLib').classList.toggle('active',v==='library');
+  document.getElementById('hbNew').classList.toggle('active',v==='planner');
+  if(v==='library')renderLibrary();
+}
+
+// ── LIBRARY ────────────────────────────────────────────────────
+function renderLibrary(){
+  const projects=loadProjects();
+  const grid=document.getElementById('libGrid');
+  const empty=document.getElementById('libEmpty');
+  if(!projects.length){grid.innerHTML='';empty.style.display='';return;}
+  empty.style.display='none';
+  grid.innerHTML=projects.map(p=>`
+    <div class="proj-card" data-id="${p.id}">
+      <div class="pc-thumb">${p.thumbDataURL?`<img src="${p.thumbDataURL}">`:'<span class="pc-no-img">No photo</span>'}<span class="pc-loc-badge">${esc(p.region)}</span></div>
+      <div class="pc-body">
+        <div class="pc-title">${esc(p.title)}</div>
+        <div class="pc-sub">${esc(p.subtitle||'')}</div>
+        <div class="pc-meta"><span class="pc-stat">${esc(p.cost||'—')}</span><span class="pc-stat">${esc(p.time||'—')}</span><span class="pc-date">${new Date(p.savedAt).toLocaleDateString()}</span></div>
+        <div class="pc-actions">
+          <button class="pca open-proj" data-id="${p.id}">Open</button>
+          <button class="pca del-proj danger" data-id="${p.id}">Delete</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openProject(id){
+  const p=loadProjects().find(x=>x.id===id);if(!p)return;
+  currentPlan=p.plan;currentCountry=COUNTRIES.find(c=>c.id===p.countryId)||COUNTRIES[0];
+  loc={country:p.countryId,region:p.region};updateLocPill();
+  if(p.imgDataURL){imgDataURL=p.imgDataURL;imgEl=new Image();imgEl.src=imgDataURL;}
+  else{imgEl=null;imgDataURL=null;}
+  measurements=p.measurements||[];
+  document.getElementById('desc').value=p.description||'';
+  if(p.plan&&p.plan.renderingDataURL){
+    const ri=document.getElementById('renderImg');
+    if(ri){ri.src=p.plan.renderingDataURL;document.getElementById('renderResult').classList.add('show');}
+  }
+  showView('planner');goTab(3);
+  document.getElementById('loading').classList.remove('show');
+  renderOut(p.plan,currentCountry,true);
+  document.getElementById('saveBtn').textContent='✓ Saved';document.getElementById('saveBtn').classList.add('saved');
+}
+
+function saveProject(silent){
+  if(!currentPlan)return;
+  const btn=document.getElementById('saveBtn');
+  if(!silent)btn.textContent='Saving…';
+  const projects=loadProjects();
+  // Make thumbnail (small, for card display)
+  let thumbDataURL=null;
+  if(imgEl){
+    const th=document.createElement('canvas');
+    th.width=320;th.height=Math.round(320*(imgEl.naturalHeight/imgEl.naturalWidth));
+    th.getContext('2d').drawImage(imgEl,0,0,th.width,th.height);
+    thumbDataURL=th.toDataURL('image/jpeg',.6);
+  }
+  const proj={id:'p_'+Date.now(),title:currentPlan.title,subtitle:currentPlan.subtitle,cost:currentPlan.cost,time:currentPlan.time,countryId:loc.country,region:loc.region,description:document.getElementById('desc').value,plan:currentPlan,measurements,thumbDataURL,savedAt:Date.now()};
+  const idx=projects.findIndex(p=>p.title===proj.title&&p.region===proj.region);
+  if(idx>=0)projects[idx]={...proj,id:projects[idx].id};else projects.unshift(proj);
+  // Try saving — if quota exceeded, retry without thumbnail
+  try{
+    saveProjects(projects);
+  }catch(e){
+    try{
+      projects.forEach(p=>{p.thumbDataURL=null;});
+      saveProjects(projects);
+    }catch(e2){
+      btn.textContent='&#128190; Save';
+      alert('Could not save — storage full. Try deleting old projects.');
+      return;
+    }
+  }
+  btn.textContent='✓ Saved';btn.classList.add('saved');
+  document.getElementById('savePrompt').classList.remove('show');
+}
+
+// ── LOCATION ───────────────────────────────────────────────────
+let _selC=null,_selR=null;
+
+function buildCountryGrid(){
+  document.getElementById('countryGrid').innerHTML=COUNTRIES.map(c=>`<div class="cc" data-id="${c.id}"><span class="cc-flag">${c.flag}</span><span class="cc-name">${c.name}</span><span class="cc-units">${c.units}</span></div>`).join('');
+}
+
+function openLoc(){
+  buildCountryGrid();
+  _selC=null;_selR=null;
+  document.getElementById('regionSection').style.display='none';
+  document.getElementById('confirmLocBtn').disabled=true;
+  if(loc.country){
+    const el=document.querySelector(`.cc[data-id="${loc.country}"]`);
+    if(el){el.classList.add('sel');_selC=loc.country;showRegions(loc.country);}
+    setTimeout(()=>{
+      document.querySelectorAll('.rc').forEach(el=>{if(el.textContent.trim()===loc.region){el.classList.add('sel');_selR=loc.region;document.getElementById('confirmLocBtn').disabled=false;}});
+    },60);
+  }
+  document.getElementById('locOverlay').style.display='flex';
+}
+
+function closeLoc(){document.getElementById('locOverlay').style.display='none';}
+
+function showRegions(countryId){
+  const c=COUNTRIES.find(x=>x.id===countryId);if(!c)return;
+  document.getElementById('regionWrap').innerHTML=c.regions.map(r=>`<div class="rc" data-region="${r}">${r}</div>`).join('');
+  document.getElementById('regionSection').style.display='';
+}
+
+function confirmLoc(){
+  if(!_selC||!_selR)return;
+  loc={country:_selC,region:_selR};saveLoc();updateLocPill();closeLoc();
+}
+
+function updateLocPill(){
+  const c=COUNTRIES.find(x=>x.id===loc.country);if(!c)return;
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  const setH=(id,val)=>{const el=document.getElementById(id);if(el)el.innerHTML=val;};
+  const setPH=(id,val)=>{const el=document.getElementById(id);if(el)el.placeholder=val;};
+  set('lpFlag',c.flag);
+  set('lpLoc',`${loc.region}, ${c.name}`);
+  setH('hdrLoc',`<span>${c.flag}</span> <span>${loc.region}, ${c.name}</span>`);
+  set('unitBadge',c.units==='metric'?'mm / m':'ft / in');
+  set('munitHint',c.unitEx);
+  setPH('mVal',c.dimPh);
+}
+
+// ── CANVAS ─────────────────────────────────────────────────────
+const canvas=document.getElementById('mc');
+const ctx=canvas.getContext('2d');
+const cwrap=document.getElementById('cwrap');
+
+function initCanvas(img){
+  const mw=Math.min(cwrap.clientWidth||800,900);
+  cScale=mw/img.naturalWidth;
+  canvas.width=Math.round(img.naturalWidth*cScale);
+  canvas.height=Math.round(img.naturalHeight*cScale);
+  redraw();
+}
+
+function redraw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(imgEl)ctx.drawImage(imgEl,0,0,canvas.width,canvas.height);
+  measurements.forEach(m=>drawLine(ctx,m,m.id===selectedId));
+  if(drawState==='b'&&ptA&&ptMouse){
+    ctx.save();ctx.strokeStyle='rgba(232,168,90,.8)';ctx.lineWidth=2;ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.moveTo(ptA.x,ptA.y);ctx.lineTo(ptMouse.x,ptMouse.y);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='rgba(232,168,90,.9)';ctx.beginPath();ctx.arc(ptA.x,ptA.y,5,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawLine(c,m,sel){
+  const col=m.color;c.save();c.strokeStyle=sel?'#fff':col;c.lineWidth=sel?2.5:2;
+  c.beginPath();c.moveTo(m.x1,m.y1);c.lineTo(m.x2,m.y2);c.stroke();
+  const a=Math.atan2(m.y2-m.y1,m.x2-m.x1),p=a+Math.PI/2;
+  [[m.x1,m.y1],[m.x2,m.y2]].forEach(([px,py])=>{
+    c.beginPath();c.moveTo(px+Math.cos(p)*6,py+Math.sin(p)*6);c.lineTo(px-Math.cos(p)*6,py-Math.sin(p)*6);c.stroke();
+    c.fillStyle=col;c.beginPath();c.arc(px,py,4,0,Math.PI*2);c.fill();
+  });
+  const mx=(m.x1+m.x2)/2,my=(m.y1+m.y2)/2,lbl=m.value+(m.label?` (${m.label})`:'');
+  c.font='bold 11px "Roboto Mono",monospace';const tw=c.measureText(lbl).width;
+  c.fillStyle='rgba(28,23,16,.88)';c.fillRect(mx-tw/2-5,my-9,tw+10,17);
+  c.fillStyle=col;c.textAlign='center';c.textBaseline='middle';c.fillText(lbl,mx,my);c.restore();
+}
+
+function getPos(e){
+  const r=canvas.getBoundingClientRect();
+  const s=(e.touches&&e.touches.length)?e.touches[0]:(e.changedTouches&&e.changedTouches.length)?e.changedTouches[0]:e;
+  return{x:(s.clientX-r.left)*(canvas.width/r.width),y:(s.clientY-r.top)*(canvas.height/r.height)};
+}
+
+canvas.addEventListener('mousedown',onDn);
+canvas.addEventListener('touchstart',e=>{e.preventDefault();onDn(e);},{passive:false});
+canvas.addEventListener('mousemove',onMv);
+canvas.addEventListener('touchmove',e=>{e.preventDefault();onMv(e);},{passive:false});
+canvas.addEventListener('mouseup',onUp);
+canvas.addEventListener('touchend',e=>{e.preventDefault();onUp(e);},{passive:false});
+
+function onDn(e){const p=getPos(e);if(tool==='draw'){if(drawState==='idle'){drawState='b';ptA=p;ptMouse=p;}}else{selectedId=hitTest(p.x,p.y);redraw();}}
+function onMv(e){if(tool==='draw'&&drawState==='b'){ptMouse=getPos(e);redraw();}}
+function onUp(e){
+  if(tool==='draw'&&drawState==='b'){
+    const p=getPos(e),len=Math.hypot(p.x-ptA.x,p.y-ptA.y);
+    if(len>14){pending={x1:ptA.x,y1:ptA.y,x2:p.x,y2:p.y,pixelLen:len};openM();}
+    drawState='idle';ptA=null;ptMouse=null;redraw();
+  }
+}
+function hitTest(x,y){for(let i=measurements.length-1;i>=0;i--){const m=measurements[i];if(ptSegDist(x,y,m.x1,m.y1,m.x2,m.y2)<10)return m.id;}return null;}
+function ptSegDist(px,py,ax,ay,bx,by){const dx=bx-ax,dy=by-ay;if(!dx&&!dy)return Math.hypot(px-ax,py-ay);const t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy)));return Math.hypot(px-(ax+t*dx),py-(ay+t*dy));}
+function setTool(t){tool=t;document.getElementById('btnDraw').classList.toggle('on',t==='draw');document.getElementById('btnSel').classList.toggle('on',t==='select');document.getElementById('thint').textContent=t==='draw'?'Click two points':'Click line to select';cwrap.classList.toggle('idle',t!=='draw');}
+
+// ── MEASURE MODAL ──────────────────────────────────────────────
+function openM(){document.getElementById('mLbl').value='';document.getElementById('mVal').value='';document.getElementById('mOverlay').style.display='flex';setTimeout(()=>document.getElementById('mVal').focus(),80);}
+function confirmM(){
+  const v=document.getElementById('mVal').value.trim();if(!v){document.getElementById('mVal').style.borderColor='var(--red)';return;}
+  const l=document.getElementById('mLbl').value.trim();
+  measurements.push({id:Date.now(),...pending,label:l,value:v,color:COLORS[measurements.length%COLORS.length]});
+  document.getElementById('mOverlay').style.display='none';pending=null;redraw();renderMList();
+}
+function cancelM(){document.getElementById('mOverlay').style.display='none';pending=null;redraw();}
+function renderMList(){
+  const el=document.getElementById('mlist');
+  if(!measurements.length){el.innerHTML='<div style="font-size:.65rem;color:var(--ink4);font-style:italic;padding:.32rem 0;">None yet</div>';return;}
+  el.innerHTML=measurements.map(m=>`<div class="mi"><span class="msw" style="background:${m.color}"></span><span class="mname">${esc(m.label||'Measurement')}</span><span class="mval">${esc(m.value)}</span><button class="mdel del-meas" data-id="${m.id}" type="button">&#10005;</button></div>`).join('');
+}
+
+// ── FILE UPLOAD ────────────────────────────────────────────────
+function handleFileLoad(file){
+  if(!file||!file.type.startsWith('image/'))return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    imgDataURL=ev.target.result;imgEl=new Image();
+    imgEl.onload=()=>{
+      initCanvas(imgEl);document.getElementById('toMeasure').disabled=false;
+      document.getElementById('uploadPreview').src=imgDataURL;document.getElementById('uploadPreview').style.display='block';
+      document.getElementById('uploadPrompt').style.display='none';document.getElementById('uploadDone').style.display='flex';
+    };imgEl.src=imgDataURL;
+  };r.readAsDataURL(file);
+}
+
+const _uz=document.getElementById('uploadZone');
+_uz.addEventListener('dragover',e=>{e.preventDefault();_uz.classList.add('drag-over');});
+_uz.addEventListener('dragleave',()=>_uz.classList.remove('drag-over'));
+_uz.addEventListener('drop',e=>{e.preventDefault();_uz.classList.remove('drag-over');handleFileLoad(e.dataTransfer.files[0]);});
+
+function clearPhoto(){
+  imgEl=null;imgDataURL=null;
+  document.getElementById('uploadPreview').src='';document.getElementById('uploadPreview').style.display='none';
+  document.getElementById('uploadDone').style.display='none';document.getElementById('uploadPrompt').style.display='flex';
+  document.getElementById('toMeasure').disabled=true;
+  try{document.getElementById('fileInput').value='';document.getElementById('cameraInput').value='';}catch(e){}
+  canvas.width=0;canvas.height=0;measurements=[];renderMList();
+}
+
+// ── EXAMPLES ──────────────────────────────────────────────────
+const EX={'Built-in shelving':'Floor-to-ceiling built-in shelves in the alcove. Six adjustable shelves, closed cabinet with doors at bottom, crown moulding to blend into wall.','Deck extension':'Extend the existing deck outward using the measured dimensions. Same railing style, up to code.','Raised garden bed':'Raised garden bed in this area using dimensions shown. 300mm tall, gravel base for drainage.','Cabinet repaint':'Repaint these kitchen cabinets. Strip finish, prime and paint off-white. Include prep and application technique.','Tile backsplash':'Subway tile backsplash to the area shown. Horizontal brick pattern, white tile, grey grout.','Pergola':'Timber pergola over the outdoor area. Open battened roof for partial shade, posts to match the house.'};
+
+// ── TAB NAV ────────────────────────────────────────────────────
+function goTab(n){
+  [0,1,2,3].forEach(i=>{
+    document.getElementById(`panel${i}`).classList.toggle('active',i===n);
+    const t=document.getElementById(`tab${i}`);
+    t.classList.toggle('active',i===n);t.classList.toggle('done',i<n);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startNewProject(){
+  measurements=[];imgEl=null;imgDataURL=null;currentPlan=null;chatHistory=[];
+  document.getElementById('desc').value='';
+  try{document.getElementById('fileInput').value='';document.getElementById('cameraInput').value='';}catch(e){}
+  document.getElementById('toMeasure').disabled=true;document.getElementById('genBtn').disabled=false;
+  document.getElementById('uploadPreview').src='';document.getElementById('uploadPreview').style.display='none';
+  document.getElementById('uploadDone').style.display='none';document.getElementById('uploadPrompt').style.display='flex';
+  document.getElementById('saveBtn').textContent='💾 Save';document.getElementById('saveBtn').classList.remove('saved');
+  ctx.clearRect(0,0,canvas.width,canvas.height);canvas.width=0;canvas.height=0;
+  renderMList();
+  document.getElementById('chatMessages').innerHTML='<div class="msg ai"><div class="msg-ico">🏠</div><div class="msg-bubble">Your plan is ready! Ask me anything.</div></div>';
+  showView('planner');goTab(0);
+}
+
+// ── GENERATE ──────────────────────────────────────────────────
+async function generate(){
+  const desc=document.getElementById('desc').value.trim();
+  if(!desc){document.getElementById('desc').style.borderColor='var(--red)';setTimeout(()=>document.getElementById('desc').style.borderColor='',1200);return;}
+  if(!loc.country){openLoc();return;}
+  const country=COUNTRIES.find(c=>c.id===loc.country);currentCountry=country;
+  const isMetric=country.units==='metric';
+  document.getElementById('genBtn').disabled=true;
+  goTab(3);document.getElementById('loading').classList.add('show');document.getElementById('outDiv').classList.remove('show');
+  let di=0;const dt=setInterval(()=>{document.getElementById('ldots').textContent='.'.repeat((di++%3)+1);},480);
+  const measCtx=measurements.length?'\n\nANNOTATED MEASUREMENTS:\n'+measurements.map((m,i)=>`  ${i+1}. ${m.label||'Line'}: ${m.value} (px: ${Math.round(m.pixelLen)})`).join('\n'):'\n\nNo measurements — estimate from description.';
+  const supStr=Object.entries(country.suppliers).map(([k,v])=>`  ${k}: ${v.join(', ')}`).join('\n');
+  const sys=buildSys(country,loc.region,isMetric,supStr);
+  const userContent=[];
+  if(imgEl){
+    const exp=document.createElement('canvas');exp.width=canvas.width;exp.height=canvas.height;
+    const ec=exp.getContext('2d');ec.drawImage(imgEl,0,0,canvas.width,canvas.height);
+    measurements.forEach(m=>drawLine(ec,m,false));
+    userContent.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:exp.toDataURL('image/jpeg',.88).split(',')[1]}});
+  }
+  userContent.push({type:'text',text:`Project: ${desc}${measCtx}\n\nGenerate a precise plan with itemised cost estimates for ${country.name}.`});
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4500,system:sys,messages:[{role:'user',content:userContent}]})});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    const raw=data.content.map(b=>b.text||'').join('');
+    const plan=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    clearInterval(dt);document.getElementById('loading').classList.remove('show');
+    currentPlan=plan;chatHistory=[{role:'user',content:userContent},{role:'assistant',content:raw}];
+    renderOut(plan,country,false);
+  }catch(err){
+    clearInterval(dt);
+    document.getElementById('loading').innerHTML=`<p style="color:var(--red);font-size:.8rem;">&#9888; Error: ${esc(err.message)}</p><button onclick="goTab(2);document.getElementById('loading').classList.remove('show');document.getElementById('genBtn').disabled=false;" style="margin-top:1rem;font-size:.72rem;padding:.45rem .9rem;border:1px solid var(--rule2);background:transparent;color:var(--ink3);cursor:pointer;font-family:inherit;">&#8592; Try Again</button>`;
+  }
+}
+
+function buildSys(country,region,isMetric,supStr){
+  return `You are HomeForge, an expert home improvement and DIY planner for ${country.name} (${region}).
+LOCATION: ${country.name}, ${region} | UNITS: ${country.units} — ALL dimensions in ${isMetric?'mm or m':'feet and inches'} | CURRENCY: ${country.sym}
+STANDARDS: ${country.standards}
+LOCAL SUPPLIERS:\n${supStr}
+Return ONLY valid JSON (no markdown):
+{"title":"4-6 word name","subtitle":"one-line scope","time":"e.g. 1-2 weekends","cost":"${country.sym}XXX-XXX","difficulty":"★★★☆☆","blueprint":"ASCII blueprint with box-drawing chars, dimensions in ${isMetric?'mm/m':'ft/in'}, min 26 lines x 64 chars, labelled","blueprintCaption":"caption","costItems":[{"name":"item","qty":1,"unit":"each","unitPrice":0,"note":""}],"materials":[{"qty":"X","name":"local product"}],"suppliers":["Supplier 1","Supplier 2"],"steps":[{"title":"title","description":"detailed","tip":"pro tip"}],"notes":["note 1"]}`;
+}
+
+// ── RENDER OUTPUT ──────────────────────────────────────────────
+function renderOut(p,country,isReload){
+  document.getElementById('oTitle').textContent=p.title||'—';
+  document.getElementById('oLocTag').textContent=`${loc.region}, ${country.name} · ${country.units} · ${country.sym}`;
+  document.getElementById('oTime').textContent=p.time||'—';document.getElementById('oCost').textContent=p.cost||'—';document.getElementById('oDiff').textContent=p.difficulty||'—';
+  const ts=document.getElementById('oTimeStamp');if(ts)ts.textContent=p.time||'—';
+  const cs=document.getElementById('oCostStamp');if(cs)cs.textContent=p.cost||'—';
+  const inv=document.getElementById('hdrInvNo');if(inv)inv.textContent='HF-'+String(Date.now()).slice(-4);
+  document.getElementById('oBp').textContent=p.blueprint||'';document.getElementById('oBpCap').textContent=p.blueprintCaption||'Elevation view';
+  if(imgEl){
+    document.getElementById('photoSec').style.display='';
+    const oc=document.getElementById('oc');
+    const mw=Math.min((document.querySelector('#viewPlanner main').clientWidth||800)-24,900);
+    const sc=mw/imgEl.naturalWidth;oc.width=Math.round(imgEl.naturalWidth*sc);oc.height=Math.round(imgEl.naturalHeight*sc);
+    const octx=oc.getContext('2d');octx.drawImage(imgEl,0,0,oc.width,oc.height);
+    const ratio=sc/cScale;measurements.forEach(m=>drawLine(octx,{...m,x1:m.x1*ratio,y1:m.y1*ratio,x2:m.x2*ratio,y2:m.y2*ratio},false));
+  }else{document.getElementById('photoSec').style.display='none';}
+  renderCostTable(p.costItems||[],country.sym);
+  document.getElementById('oMats').innerHTML=(p.materials||[]).map(m=>`<div class="mat"><span class="mat-qty">${esc(m.qty)}</span><span>${esc(m.name)}</span></div>`).join('');
+  const sups=p.suppliers||[];document.getElementById('supLabel').style.display=sups.length?'':'none';document.getElementById('supRegion').textContent=`${loc.region}, ${country.name}`;document.getElementById('supRow').innerHTML=sups.map(s=>`<div class="sup-chip"><span class="sc-dot"></span>${esc(s)}</div>`).join('');
+  document.getElementById('oSteps').innerHTML=(p.steps||[]).map((s,i)=>`<div class="step"><div class="step-n">${String(i+1).padStart(2,'0')}</div><div><h4>${esc(s.title)}</h4><p>${esc(s.description)}</p>${s.tip?`<span class="step-tip">&#128161; ${esc(s.tip)}</span>`:''}</div></div>`).join('');
+  document.getElementById('oNotes').innerHTML=(p.notes||[]).map(n=>`<div class="note"><span style="font-size:.9rem;flex-shrink:0">&#9888;&#65039;</span><p>${esc(n)}</p></div>`).join('');
+  renderChatSugs();
+  initRenderingSection();
+  document.getElementById('outDiv').classList.add('show');
+  if(!isReload){
+    document.getElementById('outDiv').scrollIntoView({behavior:'smooth',block:'start'});
+    // Show save prompt for new plans
+    document.getElementById('savePrompt').classList.add('show');
+    document.getElementById('saveBtn').textContent='&#128190; Save';
+    document.getElementById('saveBtn').classList.remove('saved');
+  }
+}
+
+// ── COST ESTIMATOR ─────────────────────────────────────────────
+let costItems=[];
+function renderCostTable(items,sym){costItems=items.map(it=>({...it,_id:Date.now()+Math.random()}));rebuildCostTable(sym||currentCountry?.sym||'$');}
+function rebuildCostTable(sym){
+  document.getElementById('costBody').innerHTML=costItems.map((it,i)=>`<tr><td>${esc(it.name)}${it.note?`<br><span style="font-size:.6rem;color:var(--ink4)">${esc(it.note)}</span>`:''}</td><td><input type="number" value="${it.qty}" min="0" step="any" data-i="${i}" data-f="qty"></td><td><input type="number" value="${it.unitPrice}" min="0" step="any" data-i="${i}" data-f="unitPrice"></td><td class="line-total">${sym}${(+it.qty*(+it.unitPrice)).toFixed(2)}</td><td><button class="del-row-btn" data-i="${i}" type="button">&#10005;</button></td></tr>`).join('');
+  updateCostTotal(sym);
+}
+function updateCostTotal(sym){const t=costItems.reduce((s,it)=>s+(+it.qty*(+it.unitPrice)),0);document.getElementById('costTotal').textContent=`${sym}${t.toFixed(2)}`;if(currentPlan)currentPlan.costItems=costItems;}
+function addCostRow(){costItems.push({_id:Date.now(),name:'New item',qty:1,unit:'each',unitPrice:0,note:''});rebuildCostTable(currentCountry?.sym||'$');}
+
+
+// ── AUTOSAVE ────────────────────────────────────────────────────
+let _autosaveTimer=null;
+function scheduleAutosave(){
+  if(!currentPlan)return;
+  clearTimeout(_autosaveTimer);
+  _autosaveTimer=setTimeout(()=>{
+    if(currentPlan&&document.getElementById('saveBtn').classList.contains('saved')){
+      saveProject(true); // silent autosave
+    }
+  },1500);
+}
+
+
+// ── STABILITY AI ───────────────────────────────────────────────
+function getStabilityKey(){return localStorage.getItem('hf_stability_key')||'';}
+
+function showStabilitySetup(){
+  const key=prompt('Enter your Stability AI API key (get one free at platform.stability.ai):');
+  if(key&&key.trim()){
+    localStorage.setItem('hf_stability_key',key.trim());
+    initRenderingSection();
+  }
+}
+
+let _renderStyle='photorealistic architectural render, professional photography';
+
+function initRenderingSection(){
+  const hasKey=!!getStabilityKey();
+  const noKey=document.getElementById('renderNoKey');
+  const controls=document.getElementById('renderControls');
+  if(noKey)noKey.style.display=hasKey?'none':'';
+  if(controls)controls.style.display=hasKey?'':'none';
+  const hint=document.getElementById('renderHint');
+  const srow=document.getElementById('strengthRow');
+  if(hint){
+    if(imgEl){
+      hint.innerHTML='&#128247; Will transform your uploaded photo &middot; ~2 credits';
+      hint.style.color='var(--green)';
+      if(srow)srow.style.display='';
+    } else {
+      hint.textContent='No photo — will generate from description · ~2 credits';
+      hint.style.color='';
+      if(srow)srow.style.display='none';
+    }
+  }
+}
+
+function buildRenderPrompt(){
+  if(!currentPlan)return '';
+  const country=currentCountry||COUNTRIES[0];
+  const desc=document.getElementById('desc').value||'';
+  const measStr=measurements.length?measurements.map(m=>`${m.value}${m.label?' '+m.label:''}`).join(', '):'';
+  return `${currentPlan.title}, ${desc.slice(0,120)}, ${country.region} ${country.name} residential project${measStr?', dimensions: '+measStr:''}, ${_renderStyle}, high quality, detailed, natural lighting, realistic materials`;
+}
+
+async function generateRendering(){
+  const key=getStabilityKey();
+  if(!key){showStabilitySetup();return;}
+
+  const prompt=buildRenderPrompt();
+  document.getElementById('renderLoading').classList.add('show');
+  document.getElementById('renderResult').classList.remove('show');
+  document.getElementById('renderBtn').disabled=true;
+
+  try{
+    let res, data;
+
+    if(imgEl){
+      // ── IMAGE-TO-IMAGE via newer v2beta endpoint ─────────────
+      // Resize photo to fit within 1024px on longest side
+      const maxDim=1024;
+      const scale=Math.min(maxDim/imgEl.naturalWidth, maxDim/imgEl.naturalHeight, 1);
+      const w=Math.round(imgEl.naturalWidth*scale);
+      const h=Math.round(imgEl.naturalHeight*scale);
+      const srcCanvas=document.createElement('canvas');
+      srcCanvas.width=w; srcCanvas.height=h;
+      srcCanvas.getContext('2d').drawImage(imgEl,0,0,w,h);
+
+      // Canvas to blob
+      const imgBlob=await new Promise(res=>srcCanvas.toBlob(res,'image/png',0.92));
+
+      const form=new FormData();
+      form.append('image', imgBlob, 'space.png');
+      form.append('prompt', prompt);
+      form.append('negative_prompt', 'blurry, cartoon, ugly, low quality, distorted, people, text, watermark');
+      // Slider: user sets 10-80% "change amount" → map to strength 0.1–0.8
+      const sliderEl=document.getElementById('strengthSlider');
+      const strength=sliderEl?(+sliderEl.value/100).toFixed(2):'0.65';
+      form.append('strength', strength); // 0=keep photo, 1=ignore photo
+      form.append('output_format', 'png');
+
+      res=await fetch('https://api.stability.ai/v2beta/stable-image/generate/sd3',{
+        method:'POST',
+        headers:{
+          'Accept':'image/*',
+          'Authorization':`Bearer ${key}`
+        },
+        body:form
+      });
+
+      if(!res.ok){
+        const errText=await res.text();
+        throw new Error(errText||`API error ${res.status}`);
+      }
+
+      // v2beta returns raw image bytes, not JSON
+      const blob=await res.blob();
+      const imgSrc=await new Promise(resolve=>{
+        const reader=new FileReader();
+        reader.onload=()=>resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+
+      const modeLabel='Generated from your photo';
+      document.getElementById('renderImg').src=imgSrc;
+      document.getElementById('renderCaption').textContent=`${modeLabel} · "${prompt.slice(0,70)}…"`;
+      document.getElementById('renderLoading').classList.remove('show');
+      document.getElementById('renderResult').classList.add('show');
+      if(currentPlan){currentPlan.renderingDataURL=imgSrc;scheduleAutosave();}
+      document.getElementById('renderBtn').disabled=false;
+      return; // exit early — v2beta flow complete
+
+    } else {
+      // ── TEXT-TO-IMAGE: no photo uploaded ────────────────────
+      res=await fetch('https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Accept':'application/json',
+          'Authorization':`Bearer ${key}`
+        },
+        body:JSON.stringify({
+          text_prompts:[
+            {text:prompt, weight:1},
+            {text:'blurry, cartoon, unrealistic, ugly, low quality, distorted, people, humans', weight:-1}
+          ],
+          cfg_scale:7,
+          height:768,
+          width:1344,
+          samples:1,
+          steps:30,
+        })
+      });
+    }
+
+    if(!res.ok){
+      const err=await res.json();
+      throw new Error(err.message||`API error ${res.status}`);
+    }
+
+    data=await res.json();
+    const imgData=data.artifacts[0].base64;
+    const imgSrc=`data:image/png;base64,${imgData}`;
+
+    const modeLabel=imgEl?'Generated from your photo':'Generated from description';
+    document.getElementById('renderImg').src=imgSrc;
+    document.getElementById('renderCaption').textContent=`${modeLabel} · "${prompt.slice(0,70)}…"`;
+    document.getElementById('renderLoading').classList.remove('show');
+    document.getElementById('renderResult').classList.add('show');
+
+    if(currentPlan){
+      currentPlan.renderingDataURL=imgSrc;
+      scheduleAutosave();
+    }
+  }catch(err){
+    document.getElementById('renderLoading').classList.remove('show');
+    alert('Rendering failed: '+err.message+'. Check your Stability AI key and credits at platform.stability.ai');
+  }
+  document.getElementById('renderBtn').disabled=false;
+}
+
+// ── CHAT ───────────────────────────────────────────────────────
+function renderChatSugs(){document.getElementById('chatSugs').innerHTML=["Make it cheaper","Swap to treated pine","More detail on steps","Common mistakes","Add a shelf","How long will it last?"].map(s=>`<div class="sug-chip sug">${s}</div>`).join('');}
+const REGEN_TRIGGERS=/\b(regenerate|redo|start over|new plan|completely redo|rewrite the plan|rebuild the plan|generate again|make a new plan|fresh plan)\b/i;
+
+async function sendChat(){
+  const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;
+  input.value='';
+
+  // Check for regenerate intent
+  if(REGEN_TRIGGERS.test(msg)){
+    appendMsg('user',msg);
+    appendMsg('ai','Regenerating your plan now\u2026');
+    setTimeout(()=>{
+      goTab(2); // go back to describe step
+      setTimeout(()=>generate(),300);
+    },600);
+    return;
+  }
+
+  appendMsg('user',msg);
+  document.getElementById('chatSend').disabled=true;document.getElementById('chatTyping').style.display='flex';document.getElementById('chatMessages').scrollTop=99999;
+  const country=currentCountry||COUNTRIES[0];const isMetric=country.units==='metric';
+  const supStr=Object.entries(country.suppliers).map(([k,v])=>`  ${k}: ${v.join(', ')}`).join('\n');
+  const sys=buildSys(country,loc.region,isMetric,supStr)+'\n\nCHAT MODE: Respond conversationally in plain text (not JSON). Be concise and practical.';
+  chatHistory.push({role:'user',content:msg});
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:chatHistory})});
+    const data=await res.json();const reply=data.content.map(b=>b.text||'').join('');
+    chatHistory.push({role:'assistant',content:reply});
+    document.getElementById('chatTyping').style.display='none';appendMsg('ai',reply);
+  }catch{document.getElementById('chatTyping').style.display='none';appendMsg('ai','Sorry, something went wrong. Please try again.');}
+  document.getElementById('chatSend').disabled=false;
+}
+function appendMsg(role,text){
+  const div=document.createElement('div');div.className=`msg ${role}`;
+  div.innerHTML=`<div class="msg-ico">${role==='ai'?'🏠':'👤'}</div><div class="msg-bubble">${esc(text).replace(/\n/g,'<br>')}</div>`;
+  const msgs=document.getElementById('chatMessages');msgs.appendChild(div);msgs.scrollTop=99999;
+}
+
+// ── EVENT WIRING ───────────────────────────────────────────────
+// All events wired via addEventListener — no inline onclick in HTML
+document.addEventListener('DOMContentLoaded',function(){
+  // Setup
+  document.getElementById('saveKeyBtn').addEventListener('click',saveApiKey);
+  document.getElementById('apiKeyInput').addEventListener('keydown',e=>{if(e.key==='Enter')saveApiKey();});
+
+  // Header
+  document.getElementById('locBtn').addEventListener('click',openLoc);
+  document.getElementById('logoBtn').addEventListener('click',()=>showView('library'));
+  document.getElementById('hbLib').addEventListener('click',()=>showView('library'));
+  document.getElementById('hbNew').addEventListener('click',startNewProject);
+
+  // Location modal
+  document.getElementById('cancelLocBtn').addEventListener('click',closeLoc);
+  document.getElementById('confirmLocBtn').addEventListener('click',confirmLoc);
+  document.getElementById('countryGrid').addEventListener('click',function(e){
+    const cc=e.target.closest('.cc');if(!cc)return;
+    document.querySelectorAll('.cc').forEach(el=>el.classList.remove('sel'));
+    cc.classList.add('sel');_selC=cc.dataset.id;
+    showRegions(_selC);document.getElementById('confirmLocBtn').disabled=true;_selR=null;
+  });
+  document.getElementById('regionWrap').addEventListener('click',function(e){
+    const rc=e.target.closest('.rc');if(!rc)return;
+    document.querySelectorAll('.rc').forEach(el=>el.classList.remove('sel'));
+    rc.classList.add('sel');_selR=rc.dataset.region;document.getElementById('confirmLocBtn').disabled=false;
+  });
+
+  // Library
+  document.getElementById('libNewBtn').addEventListener('click',startNewProject);
+  document.getElementById('libGrid').addEventListener('click',function(e){
+    const op=e.target.closest('.open-proj');const dp=e.target.closest('.del-proj');
+    if(op){e.stopPropagation();openProject(op.dataset.id);}
+    else if(dp){e.stopPropagation();if(confirm('Delete this project?')){saveProjects(loadProjects().filter(p=>p.id!==dp.dataset.id));renderLibrary();}}
+    else{const card=e.target.closest('.proj-card');if(card)openProject(card.dataset.id);}
+  });
+
+  // Step 1
+  document.getElementById('fileInput').addEventListener('change',e=>handleFileLoad(e.target.files[0]));
+  document.getElementById('cameraInput').addEventListener('change',e=>handleFileLoad(e.target.files[0]));
+  document.getElementById('clearPhotoBtn').addEventListener('click',clearPhoto);
+  document.getElementById('skipPhotoChip').addEventListener('click',function(){
+    imgEl=null;imgDataURL=null;document.getElementById('toMeasure').disabled=false;
+    canvas.width=0;canvas.height=0;
+    document.getElementById('toolbar').innerHTML='<span style="font-size:.65rem;color:var(--ink4);font-style:italic;padding:.3rem;">No photo — describe your space in detail in step 3</span>';
+    goTab(1);
+  });
+  document.getElementById('toMeasure').addEventListener('click',()=>goTab(1));
+
+  // Step 2
+  document.getElementById('btnDraw').addEventListener('click',()=>setTool('draw'));
+  document.getElementById('btnSel').addEventListener('click',()=>setTool('select'));
+  document.getElementById('btnClear').addEventListener('click',function(){if(measurements.length&&!confirm('Clear all?'))return;measurements=[];redraw();renderMList();});
+  document.getElementById('backToSpace').addEventListener('click',()=>goTab(0));
+  document.getElementById('toDescribe').addEventListener('click',()=>goTab(2));
+  document.getElementById('mlist').addEventListener('click',function(e){
+    const btn=e.target.closest('.del-meas');if(!btn)return;
+    measurements=measurements.filter(m=>m.id!==+btn.dataset.id);redraw();renderMList();
+  });
+
+  // Measure modal
+  document.getElementById('confirmMBtn').addEventListener('click',confirmM);
+  document.getElementById('cancelMBtn').addEventListener('click',cancelM);
+  document.getElementById('mVal').addEventListener('keydown',e=>{if(e.key==='Enter')confirmM();if(e.key==='Escape')cancelM();});
+
+  // Step 3
+  document.querySelectorAll('.ex-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{document.getElementById('desc').value=EX[chip.textContent.trim()]||chip.textContent;});
+  });
+  document.getElementById('backToMeasure').addEventListener('click',()=>goTab(1));
+  document.getElementById('genBtn').addEventListener('click',generate);
+
+  // Output
+  document.getElementById('saveBtn').addEventListener('click',()=>saveProject(false));
+  document.getElementById('spSaveBtn').addEventListener('click',()=>saveProject(false));
+  document.getElementById('spDismissBtn').addEventListener('click',()=>document.getElementById('savePrompt').classList.remove('show'));
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+  document.getElementById('renderBtn').addEventListener('click',generateRendering);
+  const slider=document.getElementById('strengthSlider');
+  if(slider)slider.addEventListener('input',function(){document.getElementById('strengthVal').textContent=this.value+'%';});
+  document.getElementById('renderAgainBtn').addEventListener('click',generateRendering);
+  document.getElementById('styleRow').addEventListener('click',function(e){
+    const chip=e.target.closest('.style-chip');if(!chip)return;
+    document.querySelectorAll('.style-chip').forEach(c=>c.classList.remove('on'));
+    chip.classList.add('on');
+    _renderStyle=chip.dataset.style;
+  });
+  document.getElementById('backToLib').addEventListener('click',()=>showView('library'));
+  document.getElementById('anotherProject').addEventListener('click',startNewProject);
+  document.getElementById('addItemBtn').addEventListener('click',addCostRow);
+  document.getElementById('costBody').addEventListener('change',function(e){
+    const inp=e.target;if(!inp.dataset.i)return;
+    costItems[+inp.dataset.i][inp.dataset.f]=parseFloat(inp.value)||0;
+    rebuildCostTable(currentCountry?.sym||'$');
+    scheduleAutosave();
+  });
+  document.getElementById('costBody').addEventListener('click',function(e){
+    const btn=e.target.closest('.del-row-btn');if(!btn)return;
+    costItems.splice(+btn.dataset.i,1);rebuildCostTable(currentCountry?.sym||'$');
+  });
+
+  // Chat
+  document.getElementById('chatSend').addEventListener('click',sendChat);
+  document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+  document.getElementById('chatSugs').addEventListener('click',function(e){
+    const chip=e.target.closest('.sug');if(!chip)return;
+    document.getElementById('chatInput').value=chip.textContent;sendChat();
+  });
+
+  // Step tabs (for direct nav)
+  [0,1,2,3].forEach(i=>{document.getElementById(`tab${i}`).addEventListener('click',()=>goTab(i));});
+
+  window.addEventListener('resize',()=>{if(imgEl)initCanvas(imgEl);});
+});
+
+// ── INIT ───────────────────────────────────────────────────────
+function init(){
+  loadLoc();updateLocPill();renderLibrary();
+  if(!loc.country)openLoc();
+}
+
+// Run init safely whether DOM is ready or not
+function bootApp(){
+  if(getApiKey()){
+    const ss=document.getElementById('setupScreen');
+    if(ss)ss.parentNode.removeChild(ss);
+    init();
+  }
+  // else: setup screen stays visible, init() called from saveApiKey()
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',bootApp);
+} else {
+  bootApp();
+}
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+</script>
+</body>
+</html>
