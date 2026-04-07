@@ -878,8 +878,12 @@ function openProject(id){
   const p=loadProjects().find(x=>x.id===id);if(!p)return;
   currentPlan=p.plan;currentCountry=COUNTRIES.find(c=>c.id===p.countryId)||COUNTRIES[0];
   loc={country:p.countryId,region:p.region};updateLocPill();
-  if(p.imgDataURL){imgDataURL=p.imgDataURL;imgEl=new Image();imgEl.src=imgDataURL;}
-  else{imgEl=null;imgDataURL=null;}
+  if(p.imgDataURL){
+    imgDataURL=p.imgDataURL;
+    imgEl=new Image();
+    imgEl.onload=()=>initCanvas(imgEl);
+    imgEl.src=imgDataURL;
+  } else {imgEl=null;imgDataURL=null;}
   measurements=p.measurements||[];
   document.getElementById('desc').value=p.description||'';
   if(p.plan&&p.plan.renderingDataURL){
@@ -905,7 +909,7 @@ function saveProject(silent){
     th.getContext('2d').drawImage(imgEl,0,0,th.width,th.height);
     thumbDataURL=th.toDataURL('image/jpeg',.6);
   }
-  const proj={id:'p_'+Date.now(),title:currentPlan.title,subtitle:currentPlan.subtitle,cost:currentPlan.cost,time:currentPlan.time,countryId:loc.country,region:loc.region,description:document.getElementById('desc').value,plan:currentPlan,measurements,thumbDataURL,savedAt:Date.now()};
+  const proj={id:'p_'+Date.now(),title:currentPlan.title,subtitle:currentPlan.subtitle,cost:currentPlan.cost,time:currentPlan.time,countryId:loc.country,region:loc.region,description:document.getElementById('desc').value,plan:currentPlan,measurements,imgDataURL:imgDataURL||null,thumbDataURL,savedAt:Date.now()};
   const idx=projects.findIndex(p=>p.title===proj.title&&p.region===proj.region);
   if(idx>=0)projects[idx]={...proj,id:projects[idx].id};else projects.unshift(proj);
   // Try saving — if quota exceeded, retry without thumbnail
@@ -1058,13 +1062,32 @@ function handleFileLoad(file){
   if(!file||!file.type.startsWith('image/'))return;
   const r=new FileReader();
   r.onload=ev=>{
-    imgDataURL=ev.target.result;imgEl=new Image();
-    imgEl.onload=()=>{
-      initCanvas(imgEl);document.getElementById('toMeasure').disabled=false;
-      document.getElementById('uploadPreview').src=imgDataURL;document.getElementById('uploadPreview').style.display='block';
-      document.getElementById('uploadPrompt').style.display='none';document.getElementById('uploadDone').style.display='flex';
-    };imgEl.src=imgDataURL;
-  };r.readAsDataURL(file);
+    const raw=new Image();
+    raw.onload=()=>{
+      // Compress: scale down to max 1200px on longest side, JPEG at 0.72 quality
+      // Keeps enough detail for AI rendering and canvas annotation, ~100-200KB
+      const MAX=1200;
+      const scale=Math.min(MAX/raw.naturalWidth, MAX/raw.naturalHeight, 1);
+      const w=Math.round(raw.naturalWidth*scale);
+      const h=Math.round(raw.naturalHeight*scale);
+      const comp=document.createElement('canvas');
+      comp.width=w; comp.height=h;
+      comp.getContext('2d').drawImage(raw,0,0,w,h);
+      imgDataURL=comp.toDataURL('image/jpeg',0.72);
+      imgEl=new Image();
+      imgEl.onload=()=>{
+        initCanvas(imgEl);
+        document.getElementById('toMeasure').disabled=false;
+        document.getElementById('uploadPreview').src=imgDataURL;
+        document.getElementById('uploadPreview').style.display='block';
+        document.getElementById('uploadPrompt').style.display='none';
+        document.getElementById('uploadDone').style.display='flex';
+      };
+      imgEl.src=imgDataURL;
+    };
+    raw.src=ev.target.result;
+  };
+  r.readAsDataURL(file);
 }
 
 const _uz=document.getElementById('uploadZone');
